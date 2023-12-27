@@ -136,7 +136,7 @@ const DynamicQuestionnaire: React.FC = () => {
         value={currentQuestion.Format}
         onChange={(e) => handleQuestionChange(index, 'Format', e.target.value)}
       >
-        <option value="">Select Format</option>
+        <option value="">Select Format (if supported by ATS)</option>
         {formatOptions.map((format, idx) => (
           <option key={idx} value={format}>
             {format}
