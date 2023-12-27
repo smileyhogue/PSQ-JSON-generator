@@ -98,13 +98,31 @@ const DynamicQuestionnaire: React.FC = () => {
     setQuestions(updatedQuestions);
   };
 
+  const deleteQuestion = (index: number) => {
+    const updatedQuestions = questions.filter(
+      (_, questionIndex) => questionIndex !== index
+    );
+    setQuestions(updatedQuestions);
+  };
+
+  const deleteAnswer = (questionIndex: number, answerIndex: number) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[questionIndex].Answers = updatedQuestions[
+      questionIndex
+    ].Answers.filter((_, ansIndex) => ansIndex !== answerIndex);
+    setQuestions(updatedQuestions);
+  };
+
   const getAdditionalFields = (
     type: QuestionType,
     index: number
   ): JSX.Element | null => {
+    const currentQuestion = questions[index];
+
     const formatDropdown = (
       <select
         className={styles.additionalInput}
+        value={currentQuestion.Format}
         onChange={(e) => handleQuestionChange(index, 'Format', e.target.value)}
       >
         <option value="">Select Format</option>
@@ -136,6 +154,39 @@ const DynamicQuestionnaire: React.FC = () => {
               Required
             </label>
             {formatDropdown}
+            {currentQuestion.Format === 'integer' && (
+              <>
+                <input
+                  type="number"
+                  placeholder="Min Value"
+                  value={currentQuestion.Min}
+                  onChange={(e) =>
+                    handleQuestionChange(index, 'Min', e.target.value)
+                  }
+                  className={styles.questionInput}
+                />
+                <input
+                  type="number"
+                  placeholder="Max Value"
+                  value={currentQuestion.Max}
+                  onChange={(e) =>
+                    handleQuestionChange(index, 'Max', e.target.value)
+                  }
+                  className={styles.questionInput}
+                />
+              </>
+            )}
+            {currentQuestion.Format === 'text' && (
+              <input
+                type="number"
+                placeholder="Character Limit"
+                value={currentQuestion.Limit}
+                onChange={(e) =>
+                  handleQuestionChange(index, 'Limit', parseInt(e.target.value))
+                }
+                className={styles.questionInput}
+              />
+            )}
           </>
         );
       case 'MultiSelect':
@@ -186,6 +237,12 @@ const DynamicQuestionnaire: React.FC = () => {
                   }
                   className={styles.questionInput}
                 />
+                <button
+                  onClick={() => deleteAnswer(index, answerIndex)}
+                  className={styles.deleteButton}
+                >
+                  Delete Answer
+                </button>
               </div>
             ))}
             <button
@@ -276,6 +333,12 @@ const DynamicQuestionnaire: React.FC = () => {
             <option value="SingleSelect">SingleSelect</option>
             <option value="Date">Date</option>
           </select>
+          <button
+            onClick={() => deleteQuestion(index)}
+            className={styles.deleteButton}
+          >
+            Delete Question
+          </button>
           <div className={styles.additionalFields}>
             {getAdditionalFields(question.QuestionType, index)}
           </div>
