@@ -84,3 +84,17 @@
 .smallButton:hover {
   background-color: #0056b3; /* Darker blue on hover */
 }
+
+.deleteButton {
+  padding: 6px 10px;
+  background-color: #dc3545; /* Red background */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.deleteButton:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
