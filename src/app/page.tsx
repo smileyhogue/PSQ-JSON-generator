@@ -1,5 +1,3 @@
-// pages/index.tsx
-
 import React from 'react';
 import DynamicQuestionnaire from './components/DynamicQuestionnaire';
 
