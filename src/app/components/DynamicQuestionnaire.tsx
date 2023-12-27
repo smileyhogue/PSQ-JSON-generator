@@ -35,8 +35,19 @@ const DynamicQuestionnaire: React.FC = () => {
 
   useEffect(() => {
     const jsonQuestions = questions.map(
-      ({ additionalFields, ...question }) => question
+      ({ additionalFields, Answers, ...question }) => {
+        // If the question type is not 'MultiSelect' or 'SingleSelect', exclude Answers
+        if (
+          question.QuestionType !== 'MultiSelect' &&
+          question.QuestionType !== 'SingleSelect'
+        ) {
+          return question;
+        }
+        // Else, include Answers
+        return { ...question, Answers };
+      }
     );
+
     setJsonOutput(JSON.stringify(jsonQuestions, null, 2));
   }, [questions]);
 
