@@ -1,6 +1,26 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/DynamicQuestionnaire.module.css';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from './ui/accordion';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 type QuestionType =
   | 'Text'
@@ -51,11 +71,15 @@ const DynamicQuestionnaire: React.FC = () => {
     setJsonOutput(JSON.stringify(jsonQuestions, null, 2));
   }, [questions]);
 
+  const [value, setValue] = React.useState('0');
+  const [answerValue, setAnswerValue] = React.useState('0');
+
   const addQuestion = () => {
+    const newQuestionID = (questions.length + 1).toString();
     setQuestions([
       ...questions,
       {
-        ExtQuestionID: '',
+        ExtQuestionID: newQuestionID,
         QuestionText: '',
         QuestionType: '',
         Required: false,
@@ -66,6 +90,7 @@ const DynamicQuestionnaire: React.FC = () => {
         Answers: [],
       },
     ]);
+    setValue(questions.length.toString());
   };
 
   const handleQuestionChange = (
@@ -107,6 +132,9 @@ const DynamicQuestionnaire: React.FC = () => {
       AnswerText: '',
     });
     setQuestions(updatedQuestions);
+    setAnswerValue(
+      (updatedQuestions[questionIndex].Answers.length - 1).toString()
+    );
   };
 
   const deleteQuestion = (index: number) => {
@@ -167,7 +195,7 @@ const DynamicQuestionnaire: React.FC = () => {
             {formatDropdown}
             {currentQuestion.Format === 'integer' && (
               <>
-                <input
+                <Input
                   type="number"
                   placeholder="Min Value"
                   value={currentQuestion.Min}
@@ -176,7 +204,7 @@ const DynamicQuestionnaire: React.FC = () => {
                   }
                   className={styles.questionInput}
                 />
-                <input
+                <Input
                   type="number"
                   placeholder="Max Value"
                   value={currentQuestion.Max}
@@ -188,7 +216,7 @@ const DynamicQuestionnaire: React.FC = () => {
               </>
             )}
             {currentQuestion.Format === 'text' && (
-              <input
+              <Input
                 type="number"
                 placeholder="Character Limit"
                 value={currentQuestion.Limit}
@@ -218,50 +246,65 @@ const DynamicQuestionnaire: React.FC = () => {
             >
               Required
             </label>
-            {questions[index].Answers.map((answer, answerIndex) => (
-              <div key={answerIndex}>
-                <input
-                  type="text"
-                  placeholder="Answer ID"
-                  value={answer.ExtAnswerID}
-                  onChange={(e) =>
-                    handleAnswerChange(
-                      index,
-                      answerIndex,
-                      'ExtAnswerID',
-                      e.target.value
-                    )
-                  }
-                  className={styles.questionInput}
-                />
-                <input
-                  type="text"
-                  placeholder="Answer Text"
-                  value={answer.AnswerText}
-                  onChange={(e) =>
-                    handleAnswerChange(
-                      index,
-                      answerIndex,
-                      'AnswerText',
-                      e.target.value
-                    )
-                  }
-                  className={styles.questionInput}
-                />
-                <button
-                  onClick={() => deleteAnswer(index, answerIndex)}
-                  className={styles.deleteButton}
-                >
-                  Delete Answer
-                </button>
-              </div>
-            ))}
-            <button
+
+            <Accordion
+              type="single"
+              value={answerValue}
+              onValueChange={setAnswerValue}
+            >
+              {questions[index].Answers.map((answer, answerIndex) => (
+                <AccordionItem key={answerIndex} value={answerIndex.toString()}>
+                  <AccordionTrigger>
+                    {answer.AnswerText || `Answer ${answerIndex + 1}`}
+                    <Button
+                      onClick={() => deleteAnswer(index, answerIndex)}
+                      className={styles.deleteButton}
+                    >
+                      Delete Answer
+                    </Button>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <Input
+                        type="text"
+                        placeholder="Answer ID"
+                        value={answer.ExtAnswerID}
+                        onChange={(e) =>
+                          handleAnswerChange(
+                            index,
+                            answerIndex,
+                            'ExtAnswerID',
+                            e.target.value
+                          )
+                        }
+                        className={styles.questionInput}
+                      />
+                      <Input
+                        type="text"
+                        placeholder="Answer Text"
+                        value={answer.AnswerText}
+                        onChange={(e) =>
+                          handleAnswerChange(
+                            index,
+                            answerIndex,
+                            'AnswerText',
+                            e.target.value
+                          )
+                        }
+                        className={styles.questionInput}
+                      />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+            <Button
+              variant="outline"
               onClick={() => addAnswer(index)}
-              className={styles.smallButton}
+              //className={styles.smallButton}
             >
               Add Answer
-            </button>
+            </Button>
           </>
         );
       case 'Date':
@@ -306,61 +349,70 @@ const DynamicQuestionnaire: React.FC = () => {
 
   return (
     <div>
-      {questions.map((question, index) => (
-        <div key={index} className={styles.questionContainer}>
-          <input
-            type="text"
-            placeholder="Question ID"
-            value={question.ExtQuestionID}
-            onChange={(e) =>
-              handleQuestionChange(index, 'ExtQuestionID', e.target.value)
-            }
-            className={styles.questionInput}
-          />
-          <input
-            type="text"
-            placeholder="Question Text"
-            value={question.QuestionText}
-            onChange={(e) =>
-              handleQuestionChange(index, 'QuestionText', e.target.value)
-            }
-            className={styles.questionInput}
-          />
-          <select
-            className={styles.questionSelect}
-            value={question.QuestionType}
-            onChange={(e) =>
-              handleQuestionChange(
-                index,
-                'QuestionType',
-                e.target.value as QuestionType
-              )
-            }
-          >
-            <option value="">Select Type</option>
-            <option value="Text">Text</option>
-            <option value="TextArea">TextArea</option>
-            <option value="MultiSelect">MultiSelect</option>
-            <option value="SingleSelect">SingleSelect</option>
-            <option value="Date">Date</option>
-          </select>
-          <button
-            onClick={() => deleteQuestion(index)}
-            className={styles.deleteButton}
-          >
-            Delete Question
-          </button>
-          <div className={styles.additionalFields}>
-            {getAdditionalFields(question.QuestionType, index)}
-          </div>
-        </div>
-      ))}
-      <button className={styles.addButton} onClick={addQuestion}>
+      <Accordion type="single" value={value} onValueChange={setValue}>
+        {questions.map((question, index) => (
+          <AccordionItem key={index} value={index.toString()}>
+            <AccordionTrigger>
+              {question.QuestionText || `Question ${index + 1}`}
+              <Button
+                onClick={() => deleteQuestion(index)}
+                variant="destructive"
+              >
+                Delete
+              </Button>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className={styles.questionContainer}>
+                <Input
+                  type="text"
+                  value={question.ExtQuestionID}
+                  onChange={(e) =>
+                    handleQuestionChange(index, 'ExtQuestionID', e.target.value)
+                  }
+                  className={styles.questionInput}
+                />
+                <Input
+                  type="text"
+                  value={question.QuestionText}
+                  onChange={(e) =>
+                    handleQuestionChange(index, 'QuestionText', e.target.value)
+                  }
+                  className={styles.questionInput}
+                />
+                <Select
+                  value={question.QuestionType}
+                  onValueChange={(newValue) =>
+                    handleQuestionChange(index, 'QuestionType', newValue)
+                  }
+                >
+                  <SelectTrigger className={styles.questionSelect}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Types</SelectLabel>
+                      <SelectItem value="Text">Text</SelectItem>
+                      <SelectItem value="TextArea">TextArea</SelectItem>
+                      <SelectItem value="MultiSelect">MultiSelect</SelectItem>
+                      <SelectItem value="SingleSelect">SingleSelect</SelectItem>
+                      <SelectItem value="Date">Date</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <div className={styles.additionalFields}>
+                  {getAdditionalFields(question.QuestionType, index)}
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+      <Button variant="outline" onClick={addQuestion}>
         Add Question
-      </button>
+      </Button>
       <div>
         <h3>Generated JSON:</h3>
-        <textarea value={jsonOutput} readOnly className={styles.jsonOutput} />
+        <Textarea value={jsonOutput} readOnly className={styles.jsonOutput} />
       </div>
     </div>
   );
