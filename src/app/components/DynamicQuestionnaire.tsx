@@ -51,20 +51,22 @@ interface Question {
 const DynamicQuestionnaire: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [jsonOutput, setJsonOutput] = useState('');
-  const formatOptions = ['integer', 'text', 'date', 'email', 'url'];
+  const formatOptions = ['integer', 'text'];
 
   useEffect(() => {
     const jsonQuestions = questions.map(
-      ({ additionalFields, Answers, ...question }) => {
-        // If the question type is not 'MultiSelect' or 'SingleSelect', exclude Answers
-        if (
+      ({ additionalFields, Answers, Format, ...question }) => {
+        // Set Format to null if it's 'text'
+        const adjustedFormat = Format === 'text' ? '' : Format;
+
+        // Include Answers for certain question types
+        const adjustedQuestion =
           question.QuestionType !== 'MultiSelect' &&
           question.QuestionType !== 'SingleSelect'
-        ) {
-          return question;
-        }
-        // Else, include Answers
-        return { ...question, Answers };
+            ? { ...question, Format: adjustedFormat }
+            : { ...question, Format: adjustedFormat, Answers };
+
+        return adjustedQuestion;
       }
     );
 
