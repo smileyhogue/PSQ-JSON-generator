@@ -21,6 +21,10 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import {
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent,
+} from 'lz-string';
 
 type QuestionType =
   | 'Text'
@@ -55,8 +59,8 @@ const DynamicQuestionnaire: React.FC = () => {
 
   // testing ---------------
   const serializeStateToQueryString = (state: any) => {
-    const serializedState = JSON.stringify(state);
-    return encodeURIComponent(serializedState);
+    const stringState = JSON.stringify(state);
+    return compressToEncodedURIComponent(stringState);
   };
 
   // Usage example
@@ -69,19 +73,21 @@ const DynamicQuestionnaire: React.FC = () => {
 
   const parseQueryString = () => {
     if (typeof window !== 'undefined') {
-      // Ensure it's client-side
       const urlParams = new URLSearchParams(window.location.search);
       const data = urlParams.get('data');
-      return data ? JSON.parse(decodeURIComponent(data)) : null;
+      if (data) {
+        const decompressed = decompressFromEncodedURIComponent(data);
+        return decompressed ? JSON.parse(decompressed) : null;
+      }
     }
     return null;
   };
 
   const generateShareableUrl = () => {
     if (typeof window !== 'undefined') {
-      // Checks if window is defined
-      const serializedState = encodeURIComponent(JSON.stringify(questions));
-      return `${window.location.origin}${window.location.pathname}?data=${serializedState}`;
+      // Use serializeStateToQueryString for compression
+      const queryString = serializeStateToQueryString(questions);
+      return `${window.location.origin}${window.location.pathname}?data=${queryString}`;
     }
     return ''; // Return an empty string or handle as needed
   };
