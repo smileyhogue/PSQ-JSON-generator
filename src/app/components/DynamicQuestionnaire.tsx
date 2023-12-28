@@ -53,6 +53,46 @@ const DynamicQuestionnaire: React.FC = () => {
   const [jsonOutput, setJsonOutput] = useState('');
   const formatOptions = ['integer', 'text'];
 
+  // testing ---------------
+  const serializeStateToQueryString = (state) => {
+    const serializedState = JSON.stringify(state);
+    return encodeURIComponent(serializedState);
+  };
+
+  // Usage example
+  const queryString = serializeStateToQueryString(questions);
+  const shareableUrl = `${window.location.origin}${window.location.pathname}?data=${queryString}`;
+
+  const parseQueryString = (queryString) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const data = urlParams.get('data');
+    return data ? JSON.parse(decodeURIComponent(data)) : null;
+  };
+
+  // Usage example
+  useEffect(() => {
+    const initialState = parseQueryString(window.location.search);
+    if (initialState) {
+      setQuestions(initialState);
+    }
+  }, []);
+
+  const generateShareableUrl = () => {
+    const serializedState = encodeURIComponent(JSON.stringify(questions));
+    return `${window.location.origin}${window.location.pathname}?data=${serializedState}`;
+  };
+
+  const copyToClipboard = async () => {
+    const url = generateShareableUrl();
+    try {
+      await navigator.clipboard.writeText(url);
+      alert('URL copied to clipboard'); // Or any other indication you prefer
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  };
+  //testing ------------------
+
   useEffect(() => {
     const jsonQuestions = questions.map(
       ({ additionalFields, Answers, Format, ...question }) => {
@@ -422,6 +462,7 @@ const DynamicQuestionnaire: React.FC = () => {
         <h3>Generated JSON:</h3>
         <Textarea value={jsonOutput} readOnly className={styles.jsonOutput} />
       </div>
+      <Button onClick={copyToClipboard}>Copy Shareable URL</Button>
     </div>
   );
 };
