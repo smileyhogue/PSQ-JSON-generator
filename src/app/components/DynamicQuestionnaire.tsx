@@ -180,21 +180,24 @@ const DynamicQuestionnaire: React.FC = () => {
       case 'TextArea':
         return (
           <>
-            <input
-              type="checkbox"
-              id={`required-${type}-${index}`}
-              className={styles.checkbox}
-              onChange={(e) =>
-                handleQuestionChange(index, 'Required', e.target.checked)
-              }
-            />
-            <label
-              htmlFor={`required-${type}-${index}`}
-              className={styles.checkboxLabel}
-            >
-              Required
-            </label>
             {formatDropdown}
+            <div className={styles.checkboxContainer}>
+              <input
+                type="checkbox"
+                id={`required-${type}-${index}`}
+                className={styles.checkbox}
+                onChange={(e) =>
+                  handleQuestionChange(index, 'Required', e.target.checked)
+                }
+              />
+              <label
+                htmlFor={`required-${type}-${index}`}
+                className={styles.checkboxLabel}
+              >
+                Required
+              </label>
+            </div>
+
             {currentQuestion.Format === 'integer' && (
               <>
                 <Input
@@ -313,20 +316,6 @@ const DynamicQuestionnaire: React.FC = () => {
         return (
           <>
             <input
-              type="checkbox"
-              id={`required-${type}-${index}`}
-              className={styles.checkbox}
-              onChange={(e) =>
-                handleQuestionChange(index, 'Required', e.target.checked)
-              }
-            />
-            <label
-              htmlFor={`required-${type}-${index}`}
-              className={styles.checkboxLabel}
-            >
-              Required
-            </label>
-            <input
               type="date"
               placeholder="Min Date"
               className={styles.additionalInput}
@@ -342,6 +331,22 @@ const DynamicQuestionnaire: React.FC = () => {
                 handleQuestionChange(index, 'Max', e.target.value)
               }
             />
+            <div className={styles.checkboxContainer}>
+              <input
+                type="checkbox"
+                id={`required-${type}-${index}`}
+                className={styles.checkbox}
+                onChange={(e) =>
+                  handleQuestionChange(index, 'Required', e.target.checked)
+                }
+              />
+              <label
+                htmlFor={`required-${type}-${index}`}
+                className={styles.checkboxLabel}
+              >
+                Required
+              </label>
+            </div>
           </>
         );
       default:

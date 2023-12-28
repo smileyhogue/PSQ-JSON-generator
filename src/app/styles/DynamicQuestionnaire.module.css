@@ -22,7 +22,7 @@
 
 .questionSelect {
   width: 35%;
-  margin-left: 5%;
+  margin-left: 0%;
 }
 
 .additionalTextarea {
@@ -46,6 +46,12 @@
 
 .addButton:hover {
   background-color: #0056b3;
+}
+
+.checkboxContainer {
+  margin-top: 10px; /* Adjust as needed */
+  display: flex;
+  align-items: center;
 }
 
 .checkbox {
