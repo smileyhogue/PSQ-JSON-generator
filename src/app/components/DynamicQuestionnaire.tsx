@@ -81,7 +81,7 @@ const DynamicQuestionnaire: React.FC = () => {
       {
         ExtQuestionID: newQuestionID,
         QuestionText: '',
-        QuestionType: '',
+        QuestionType: 'Text',
         Required: false,
         Min: '',
         Max: '',
@@ -374,6 +374,7 @@ const DynamicQuestionnaire: React.FC = () => {
                 <Input
                   type="text"
                   value={question.QuestionText}
+                  placeholder="Question Text"
                   onChange={(e) =>
                     handleQuestionChange(index, 'QuestionText', e.target.value)
                   }
