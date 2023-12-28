@@ -54,7 +54,7 @@ const DynamicQuestionnaire: React.FC = () => {
   const formatOptions = ['integer', 'text'];
 
   // testing ---------------
-  const serializeStateToQueryString = (state) => {
+  const serializeStateToQueryString = (state: any) => {
     const serializedState = JSON.stringify(state);
     return encodeURIComponent(serializedState);
   };
@@ -63,7 +63,7 @@ const DynamicQuestionnaire: React.FC = () => {
   const queryString = serializeStateToQueryString(questions);
   const shareableUrl = `${window.location.origin}${window.location.pathname}?data=${queryString}`;
 
-  const parseQueryString = (queryString) => {
+  const parseQueryString = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const data = urlParams.get('data');
     return data ? JSON.parse(decodeURIComponent(data)) : null;
@@ -71,7 +71,7 @@ const DynamicQuestionnaire: React.FC = () => {
 
   // Usage example
   useEffect(() => {
-    const initialState = parseQueryString(window.location.search);
+    const initialState = parseQueryString();
     if (initialState) {
       setQuestions(initialState);
     }
