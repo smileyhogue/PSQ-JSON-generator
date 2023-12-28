@@ -60,16 +60,6 @@ const DynamicQuestionnaire: React.FC = () => {
   };
 
   // Usage example
-  const queryString = serializeStateToQueryString(questions);
-  const shareableUrl = `${window.location.origin}${window.location.pathname}?data=${queryString}`;
-
-  const parseQueryString = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const data = urlParams.get('data');
-    return data ? JSON.parse(decodeURIComponent(data)) : null;
-  };
-
-  // Usage example
   useEffect(() => {
     const initialState = parseQueryString();
     if (initialState) {
@@ -77,18 +67,34 @@ const DynamicQuestionnaire: React.FC = () => {
     }
   }, []);
 
+  const parseQueryString = () => {
+    if (typeof window !== 'undefined') {
+      // Ensure it's client-side
+      const urlParams = new URLSearchParams(window.location.search);
+      const data = urlParams.get('data');
+      return data ? JSON.parse(decodeURIComponent(data)) : null;
+    }
+    return null;
+  };
+
   const generateShareableUrl = () => {
-    const serializedState = encodeURIComponent(JSON.stringify(questions));
-    return `${window.location.origin}${window.location.pathname}?data=${serializedState}`;
+    if (typeof window !== 'undefined') {
+      // Checks if window is defined
+      const serializedState = encodeURIComponent(JSON.stringify(questions));
+      return `${window.location.origin}${window.location.pathname}?data=${serializedState}`;
+    }
+    return ''; // Return an empty string or handle as needed
   };
 
   const copyToClipboard = async () => {
     const url = generateShareableUrl();
-    try {
-      await navigator.clipboard.writeText(url);
-      alert('URL copied to clipboard'); // Or any other indication you prefer
-    } catch (err) {
-      console.error('Failed to copy: ', err);
+    if (url) {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('URL copied to clipboard');
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
     }
   };
   //testing ------------------
