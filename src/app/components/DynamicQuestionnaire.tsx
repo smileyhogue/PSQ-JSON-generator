@@ -42,7 +42,7 @@ interface Answer {
 interface Question {
   ExtQuestionID: string;
   QuestionText: string;
-  QuestionType: QuestionType;
+  QuestionType: string;
   Required: boolean;
   Min: string;
   Max: string;
@@ -52,18 +52,101 @@ interface Question {
   additionalFields?: any; // add this line, replace 'any' with the type of 'additionalFields'
 }
 
+interface SimplifiedQuestion {
+  qid?: string;
+  qt?: string;
+  qtype?: string;
+  req?: boolean;
+  min?: string;
+  max?: string;
+  lim?: number;
+  fmt?: string;
+  ans?: SimplifiedAnswer[];
+}
+
+interface SimplifiedAnswer {
+  aid?: string;
+  at?: string;
+}
+
 const DynamicQuestionnaire: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [jsonOutput, setJsonOutput] = useState('');
   const formatOptions = ['integer', 'text'];
 
   // testing ---------------
-  const serializeStateToQueryString = (state: any) => {
-    const stringState = JSON.stringify(state);
+  const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
+    return state
+      .map(
+        ({
+          ExtQuestionID,
+          QuestionText,
+          QuestionType,
+          Required,
+          Min,
+          Max,
+          Limit,
+          Format,
+          Answers,
+        }) => ({
+          qid: ExtQuestionID || undefined,
+          qt: QuestionText || undefined,
+          qtype: QuestionType || undefined,
+          req: Required || undefined,
+          min: Min || undefined,
+          max: Max || undefined,
+          lim: Limit || undefined,
+          fmt: Format || undefined,
+          ans: Answers
+            ? Answers.map((a) => ({
+                aid: a.ExtAnswerID || undefined,
+                at: a.AnswerText || undefined,
+              }))
+            : undefined,
+        })
+      )
+      .filter((q) => Object.keys(q).length > 0);
+  };
+
+  const serializeStateToQueryString = (state: Question[]): string => {
+    const simplifiedState = simplifyState(state);
+    const stringState = JSON.stringify(simplifiedState);
     return compressToEncodedURIComponent(stringState);
   };
 
-  // Usage example
+  const expandState = (simplifiedState: SimplifiedQuestion[]): Question[] => {
+    return simplifiedState.map(
+      ({ qid, qt, qtype, req, min, max, lim, fmt, ans }) => ({
+        ExtQuestionID: qid || '',
+        QuestionText: qt || '',
+        QuestionType: qtype || '',
+        Required: req || false,
+        Min: min || '',
+        Max: max || '',
+        Limit: lim || 0,
+        Format: fmt || '',
+        Answers: ans
+          ? ans.map((a) => ({
+              ExtAnswerID: a.aid || '',
+              AnswerText: a.at || '',
+            }))
+          : [],
+      })
+    );
+  };
+
+  const parseQueryString = (): Question[] | null => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const data = urlParams.get('data');
+      if (data) {
+        const decompressed = decompressFromEncodedURIComponent(data);
+        return decompressed ? expandState(JSON.parse(decompressed)) : null;
+      }
+    }
+    return null;
+  };
+
   useEffect(() => {
     const initialState = parseQueryString();
     if (initialState) {
@@ -71,25 +154,12 @@ const DynamicQuestionnaire: React.FC = () => {
     }
   }, []);
 
-  const parseQueryString = () => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const data = urlParams.get('data');
-      if (data) {
-        const decompressed = decompressFromEncodedURIComponent(data);
-        return decompressed ? JSON.parse(decompressed) : null;
-      }
-    }
-    return null;
-  };
-
   const generateShareableUrl = () => {
     if (typeof window !== 'undefined') {
-      // Use serializeStateToQueryString for compression
       const queryString = serializeStateToQueryString(questions);
       return `${window.location.origin}${window.location.pathname}?data=${queryString}`;
     }
-    return ''; // Return an empty string or handle as needed
+    return '';
   };
 
   const copyToClipboard = async () => {
