@@ -42,7 +42,7 @@ interface Answer {
 interface Question {
   ExtQuestionID: string;
   QuestionText: string;
-  QuestionType: string;
+  QuestionType: QuestionType | string;
   Required: boolean;
   Min: string;
   Max: string;
