@@ -1,0 +1,97 @@
+import { useEffect, useState } from 'react';
+
+// Import the Question and Answer types
+import { Question, Answer } from '@/types/QuestionnaireTypes'; // Update the path accordingly
+
+export function useQuestionnaire() {
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [jsonOutput, setJsonOutput] = useState('');
+  const [value, setValue] = useState('0');
+  const [answerValue, setAnswerValue] = useState('0');
+
+  const addQuestion = () => {
+    const newQuestionID = (questions.length + 1).toString();
+    setQuestions([
+      ...questions,
+      {
+        ExtQuestionID: newQuestionID,
+        QuestionText: '',
+        QuestionType: 'Text',
+        Required: false,
+        Min: '',
+        Max: '',
+        Limit: 0,
+        Format: '',
+        Answers: [],
+      },
+    ]);
+    setValue(questions.length.toString());
+  };
+
+  const handleQuestionChange = (
+    index: number,
+    field: keyof Question,
+    value: any
+  ) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
+    setQuestions(updatedQuestions);
+  };
+
+  const handleAnswerChange = (
+    questionIndex: number,
+    answerIndex: number,
+    field: keyof Answer,
+    value: any
+  ) => {
+    const updatedQuestions = [...questions];
+    const answers = updatedQuestions[questionIndex].Answers;
+    answers[answerIndex] = { ...answers[answerIndex], [field]: value };
+    updatedQuestions[questionIndex].Answers = answers;
+    setQuestions(updatedQuestions);
+  };
+
+  const addAnswer = (questionIndex: number) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[questionIndex].Answers.push({
+      ExtAnswerID: '',
+      AnswerText: '',
+    });
+    setQuestions(updatedQuestions);
+    setAnswerValue(
+      (updatedQuestions[questionIndex].Answers.length - 1).toString()
+    );
+  };
+
+  const deleteQuestion = (index: number) => {
+    const updatedQuestions = questions.filter(
+      (_, questionIndex) => questionIndex !== index
+    );
+    setQuestions(updatedQuestions);
+  };
+
+  const deleteAnswer = (questionIndex: number, answerIndex: number) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[questionIndex].Answers = updatedQuestions[
+      questionIndex
+    ].Answers.filter((_, ansIndex) => ansIndex !== answerIndex);
+    setQuestions(updatedQuestions);
+  };
+
+  return {
+    questions,
+    jsonOutput,
+    value,
+    answerValue,
+    addQuestion,
+    handleQuestionChange,
+    handleAnswerChange,
+    addAnswer,
+    deleteQuestion,
+    deleteAnswer,
+    setAnswerValue,
+    setValue,
+    setJsonOutput,
+    setQuestions,
+  };
+}
