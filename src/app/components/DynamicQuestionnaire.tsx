@@ -1,5 +1,12 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useQuestionnaire } from '@/components/hooks/useQuestionnaire';
+import {
+  generateShareableUrl,
+  copyToClipboard,
+  parseQueryString,
+} from '../utils/questionnaireSerializer';
+import { QuestionType } from '@/types/QuestionnaireTypes'; // Update the import path accordingly
 import styles from '../styles/DynamicQuestionnaire.module.css';
 import {
   Accordion,
@@ -19,161 +26,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
-import {
-  compressToEncodedURIComponent,
-  decompressFromEncodedURIComponent,
-} from 'lz-string';
-
-type QuestionType =
-  | 'Text'
-  | 'TextArea'
-  | 'MultiSelect'
-  | 'SingleSelect'
-  | 'Date'
-  | '';
-
-interface Answer {
-  ExtAnswerID: string;
-  AnswerText: string;
-}
-
-interface Question {
-  ExtQuestionID: string;
-  QuestionText: string;
-  QuestionType: QuestionType;
-  Required: boolean;
-  Min: string;
-  Max: string;
-  Limit: number;
-  Format: string;
-  Answers: Answer[];
-  additionalFields?: any; // add this line, replace 'any' with the type of 'additionalFields'
-}
-
-interface SimplifiedQuestion {
-  qid?: string;
-  qt?: string;
-  qtype?: string;
-  req?: boolean;
-  min?: string;
-  max?: string;
-  lim?: number;
-  fmt?: string;
-  ans?: SimplifiedAnswer[];
-}
-
-interface SimplifiedAnswer {
-  aid?: string;
-  at?: string;
-}
 
 const DynamicQuestionnaire: React.FC = () => {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [jsonOutput, setJsonOutput] = useState('');
+  const {
+    questions,
+    jsonOutput,
+    value,
+    answerValue,
+    addQuestion,
+    handleQuestionChange,
+    handleAnswerChange,
+    addAnswer,
+    deleteQuestion,
+    deleteAnswer,
+    setAnswerValue,
+    setValue,
+    setJsonOutput,
+    setQuestions,
+  } = useQuestionnaire();
+
   const formatOptions = ['integer', 'text'];
-
-  // testing ---------------
-  const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
-    return state
-      .map(
-        ({
-          ExtQuestionID,
-          QuestionText,
-          QuestionType,
-          Required,
-          Min,
-          Max,
-          Limit,
-          Format,
-          Answers,
-        }) => ({
-          qid: ExtQuestionID || undefined,
-          qt: QuestionText || undefined,
-          qtype: QuestionType || undefined,
-          req: Required || undefined,
-          min: Min || undefined,
-          max: Max || undefined,
-          lim: Limit || undefined,
-          fmt: Format || undefined,
-          ans: Answers
-            ? Answers.map((a) => ({
-                aid: a.ExtAnswerID || undefined,
-                at: a.AnswerText || undefined,
-              }))
-            : undefined,
-        })
-      )
-      .filter((q) => Object.keys(q).length > 0);
-  };
-
-  const serializeStateToQueryString = (state: Question[]): string => {
-    const simplifiedState = simplifyState(state);
-    const stringState = JSON.stringify(simplifiedState);
-    return compressToEncodedURIComponent(stringState);
-  };
-
-  const expandState = (simplifiedState: SimplifiedQuestion[]): Question[] => {
-    return simplifiedState.map(
-      ({ qid, qt, qtype, req, min, max, lim, fmt, ans }) => ({
-        ExtQuestionID: qid || '',
-        QuestionText: qt || '',
-        QuestionType: qtype as QuestionType, // Type assertion
-        Required: req || false,
-        Min: min || '',
-        Max: max || '',
-        Limit: lim || 0,
-        Format: fmt || '',
-        Answers: ans
-          ? ans.map((a) => ({
-              ExtAnswerID: a.aid || '',
-              AnswerText: a.at || '',
-            }))
-          : [],
-      })
-    );
-  };
-
-  const parseQueryString = (): Question[] | null => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const data = urlParams.get('data');
-      if (data) {
-        const decompressed = decompressFromEncodedURIComponent(data);
-        return decompressed ? expandState(JSON.parse(decompressed)) : null;
-      }
-    }
-    return null;
-  };
 
   useEffect(() => {
     const initialState = parseQueryString();
     if (initialState) {
       setQuestions(initialState);
     }
-  }, []);
-
-  const generateShareableUrl = () => {
-    if (typeof window !== 'undefined') {
-      const queryString = serializeStateToQueryString(questions);
-      return `${window.location.origin}${window.location.pathname}?data=${queryString}`;
-    }
-    return '';
-  };
-
-  const copyToClipboard = async () => {
-    const url = generateShareableUrl();
-    if (url) {
-      try {
-        await navigator.clipboard.writeText(url);
-        alert('URL copied to clipboard');
-      } catch (err) {
-        console.error('Failed to copy: ', err);
-      }
-    }
-  };
-  //testing ------------------
+  }, [setQuestions]);
 
   useEffect(() => {
     const jsonQuestions = questions.map(
@@ -193,88 +72,7 @@ const DynamicQuestionnaire: React.FC = () => {
     );
 
     setJsonOutput(JSON.stringify(jsonQuestions, null, 2));
-  }, [questions]);
-
-  const [value, setValue] = React.useState('0');
-  const [answerValue, setAnswerValue] = React.useState('0');
-
-  const addQuestion = () => {
-    const newQuestionID = (questions.length + 1).toString();
-    setQuestions([
-      ...questions,
-      {
-        ExtQuestionID: newQuestionID,
-        QuestionText: '',
-        QuestionType: 'Text',
-        Required: false,
-        Min: '',
-        Max: '',
-        Limit: 0,
-        Format: '',
-        Answers: [],
-      },
-    ]);
-    setValue(questions.length.toString());
-  };
-
-  const handleQuestionChange = (
-    index: number,
-    field: keyof Question,
-    value: any
-  ) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
-
-    // Update additional fields if the question type changes
-    if (field === 'QuestionType') {
-      updatedQuestions[index].additionalFields = getAdditionalFields(
-        value as QuestionType,
-        index
-      );
-    }
-
-    setQuestions(updatedQuestions);
-  };
-
-  const handleAnswerChange = (
-    questionIndex: number,
-    answerIndex: number,
-    field: keyof Answer,
-    value: any
-  ) => {
-    const updatedQuestions = [...questions];
-    const answers = updatedQuestions[questionIndex].Answers;
-    answers[answerIndex] = { ...answers[answerIndex], [field]: value };
-    updatedQuestions[questionIndex].Answers = answers;
-    setQuestions(updatedQuestions);
-  };
-
-  const addAnswer = (questionIndex: number) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].Answers.push({
-      ExtAnswerID: '',
-      AnswerText: '',
-    });
-    setQuestions(updatedQuestions);
-    setAnswerValue(
-      (updatedQuestions[questionIndex].Answers.length - 1).toString()
-    );
-  };
-
-  const deleteQuestion = (index: number) => {
-    const updatedQuestions = questions.filter(
-      (_, questionIndex) => questionIndex !== index
-    );
-    setQuestions(updatedQuestions);
-  };
-
-  const deleteAnswer = (questionIndex: number, answerIndex: number) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].Answers = updatedQuestions[
-      questionIndex
-    ].Answers.filter((_, ansIndex) => ansIndex !== answerIndex);
-    setQuestions(updatedQuestions);
-  };
+  }, [questions, setJsonOutput]);
 
   const getAdditionalFields = (
     type: QuestionType,
@@ -288,7 +86,7 @@ const DynamicQuestionnaire: React.FC = () => {
         value={currentQuestion.Format}
         onChange={(e) => handleQuestionChange(index, 'Format', e.target.value)}
       >
-        <option value="">Select Format (if supported by ATS)</option>
+        <option value="">Select Format</option>
         {formatOptions.map((format, idx) => (
           <option key={idx} value={format}>
             {format}
@@ -544,7 +342,9 @@ const DynamicQuestionnaire: React.FC = () => {
         <h3>Generated JSON:</h3>
         <Textarea value={jsonOutput} readOnly className={styles.jsonOutput} />
       </div>
-      <Button onClick={copyToClipboard}>Copy Shareable URL</Button>
+      <Button onClick={() => copyToClipboard(generateShareableUrl(questions))}>
+        Copy Shareable URL
+      </Button>
     </div>
   );
 };
