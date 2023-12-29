@@ -42,7 +42,7 @@ interface Answer {
 interface Question {
   ExtQuestionID: string;
   QuestionText: string;
-  QuestionType: QuestionType | string;
+  QuestionType: QuestionType;
   Required: boolean;
   Min: string;
   Max: string;
@@ -119,7 +119,7 @@ const DynamicQuestionnaire: React.FC = () => {
       ({ qid, qt, qtype, req, min, max, lim, fmt, ans }) => ({
         ExtQuestionID: qid || '',
         QuestionText: qt || '',
-        QuestionType: qtype || '',
+        QuestionType: qtype as QuestionType, // Type assertion
         Required: req || false,
         Min: min || '',
         Max: max || '',
