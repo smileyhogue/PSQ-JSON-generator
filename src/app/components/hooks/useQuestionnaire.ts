@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // Import the Question and Answer types
 import { Question, Answer } from '@/types/QuestionnaireTypes'; // Update the path accordingly

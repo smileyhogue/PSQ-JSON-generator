@@ -44,15 +44,15 @@ const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
         Format,
         Answers,
       }) => ({
-        qid: ExtQuestionID || undefined,
-        qt: QuestionText || undefined,
-        qtype: QuestionType || undefined,
-        req: Required || undefined,
-        min: Min || undefined,
-        max: Max || undefined,
-        lim: Limit || undefined,
-        fmt: Format || undefined,
-        ans: Answers
+        i: ExtQuestionID || undefined,
+        t: QuestionText || undefined,
+        qt: QuestionType || undefined,
+        r: Required || undefined,
+        mi: Min || undefined,
+        ma: Max || undefined,
+        l: Limit || undefined,
+        f: Format || undefined,
+        d: Answers
           ? Answers.map((a) => ({
               aid: a.ExtAnswerID || undefined,
               at: a.AnswerText || undefined,
@@ -65,24 +65,22 @@ const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
 
 // Expand the simplified state into the original state
 const expandState = (simplifiedState: SimplifiedQuestion[]): Question[] => {
-  return simplifiedState.map(
-    ({ qid, qt, qtype, req, min, max, lim, fmt, ans }) => ({
-      ExtQuestionID: qid || '',
-      QuestionText: qt || '',
-      QuestionType: qtype as QuestionType, // Type assertion
-      Required: req || false,
-      Min: min || '',
-      Max: max || '',
-      Limit: lim || 0,
-      Format: fmt || '',
-      Answers: ans
-        ? ans.map((a) => ({
-            ExtAnswerID: a.aid || '',
-            AnswerText: a.at || '',
-          }))
-        : [],
-    })
-  );
+  return simplifiedState.map(({ i, t, qt, r, mi, ma, l, f, d }) => ({
+    ExtQuestionID: i || '',
+    QuestionText: t || '',
+    QuestionType: qt as QuestionType, // Type assertion
+    Required: r || false,
+    Min: mi || '',
+    Max: ma || '',
+    Limit: l || 0,
+    Format: f || '',
+    Answers: d
+      ? d.map((a) => ({
+          ExtAnswerID: a.aid || '',
+          AnswerText: a.at || '',
+        }))
+      : [],
+  }));
 };
 
 // Generate a shareable URL with the serialized state

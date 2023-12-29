@@ -25,15 +25,15 @@ export interface Question {
 }
 
 export interface SimplifiedQuestion {
-  qid?: string;
+  i?: string;
+  t?: string;
   qt?: string;
-  qtype?: string;
-  req?: boolean;
-  min?: string;
-  max?: string;
-  lim?: number;
-  fmt?: string;
-  ans?: SimplifiedAnswer[];
+  r?: boolean;
+  mi?: string;
+  ma?: string;
+  l?: number;
+  f?: string;
+  d?: SimplifiedAnswer[];
 }
 
 export interface SimplifiedAnswer {

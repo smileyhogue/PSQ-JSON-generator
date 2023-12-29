@@ -234,6 +234,7 @@ const DynamicQuestionnaire: React.FC = () => {
         );
       case 'Date':
         return (
+          // TODO: fix dates and required boxes to use the value from the json
           <>
             <input
               type="date"
