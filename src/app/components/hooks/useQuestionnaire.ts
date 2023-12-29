@@ -35,6 +35,18 @@ export function useQuestionnaire() {
   ) => {
     const updatedQuestions = [...questions];
     updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
+    if (field == 'Format') {
+      updatedQuestions[index].Min = '';
+      updatedQuestions[index].Max = '';
+      updatedQuestions[index].Limit = 0;
+    }
+    if (field == 'QuestionType') {
+      updatedQuestions[index].Min = '';
+      updatedQuestions[index].Max = '';
+      updatedQuestions[index].Limit = 0;
+      updatedQuestions[index].Format = '';
+      updatedQuestions[index].Answers = [];
+    }
     setQuestions(updatedQuestions);
   };
 
