@@ -62,7 +62,7 @@ const DynamicQuestionnaire: React.FC = () => {
     if (urlData) {
       setQuestions(urlData.questions);
       setModalData(urlData.modalData); // Ensure modalData includes atsType
-      setShowModal(true);
+      setShowViewModal(true);
       setIsDataFromURL(true);
     }
   }, [setQuestions, setModalData, setShowModal, setIsDataFromURL]);
