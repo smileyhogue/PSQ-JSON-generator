@@ -6,7 +6,7 @@ import {
   copyToClipboard,
   parseQueryString,
 } from '../utils/questionnaireSerializer';
-import { QuestionType } from '@/types/QuestionnaireTypes'; // Update the import path accordingly
+import { QuestionType, ModalData } from '@/types/QuestionnaireTypes'; // Update the import path accordingly
 import styles from '../styles/DynamicQuestionnaire.module.css';
 import {
   Accordion,
@@ -26,6 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import ShareModal from '@/components/modals/ShareModal';
+import ViewModalInfo from '@/components/modals/ViewModalInfo';
 
 const DynamicQuestionnaire: React.FC = () => {
   const {
@@ -43,16 +45,35 @@ const DynamicQuestionnaire: React.FC = () => {
     setValue,
     setJsonOutput,
     setQuestions,
+    showModal,
+    setShowModal,
+    setModalData,
+    modalData,
+    isDataFromURL,
+    setIsDataFromURL,
+    showViewModal,
+    setShowViewModal,
   } = useQuestionnaire();
 
   const formatOptions = ['integer', 'text'];
 
   useEffect(() => {
+    const urlData = parseQueryString();
+    if (urlData) {
+      setQuestions(urlData.questions);
+      setModalData(urlData.modalData); // Ensure modalData includes atsType
+      setShowModal(true);
+      setIsDataFromURL(true);
+    }
+  }, [setQuestions, setModalData, setShowModal, setIsDataFromURL]);
+
+  useEffect(() => {
     const initialState = parseQueryString();
     if (initialState) {
-      setQuestions(initialState);
+      setQuestions(initialState.questions);
+      setModalData(initialState.modalData); // Set the modal data state
     }
-  }, [setQuestions]);
+  }, [setQuestions, setModalData]);
 
   useEffect(() => {
     const jsonQuestions = questions.map(
@@ -280,6 +301,16 @@ const DynamicQuestionnaire: React.FC = () => {
     }
   };
 
+  const handleModalSubmit = (modalData: ModalData) => {
+    const combinedData = {
+      questions,
+      modalData,
+    };
+    const shareableUrl = generateShareableUrl(combinedData);
+    copyToClipboard(shareableUrl);
+    setShowModal(false); // Close the modal
+  };
+  console.log('questions', questions);
   return (
     <div>
       <Accordion type="single" value={value} onValueChange={setValue}>
@@ -348,9 +379,21 @@ const DynamicQuestionnaire: React.FC = () => {
         <h3>Generated JSON:</h3>
         <Textarea value={jsonOutput} readOnly className={styles.jsonOutput} />
       </div>
-      <Button onClick={() => copyToClipboard(generateShareableUrl(questions))}>
-        Copy Shareable URL
-      </Button>
+      <Button onClick={() => setShowModal(true)}>Copy Shareable URL</Button>
+      {isDataFromURL && (
+        <Button onClick={() => setShowViewModal(true)}>View Modal Info</Button>
+      )}
+      <ViewModalInfo
+        showModal={showViewModal}
+        onClose={() => setShowViewModal(false)}
+        modalData={modalData}
+      />
+      <ShareModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        onCopyURL={handleModalSubmit}
+        initialData={modalData}
+      />
     </div>
   );
 };
