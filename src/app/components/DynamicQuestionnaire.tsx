@@ -106,6 +106,7 @@ const DynamicQuestionnaire: React.FC = () => {
                 type="checkbox"
                 id={`required-${type}-${index}`}
                 className={styles.checkbox}
+                checked={questions[index].Required}
                 onChange={(e) =>
                   handleQuestionChange(index, 'Required', e.target.checked)
                 }
@@ -161,6 +162,7 @@ const DynamicQuestionnaire: React.FC = () => {
               type="checkbox"
               id={`required-${type}-${index}`}
               className={styles.checkbox}
+              checked={questions[index].Required}
               onChange={(e) =>
                 handleQuestionChange(index, 'Required', e.target.checked)
               }
@@ -240,6 +242,7 @@ const DynamicQuestionnaire: React.FC = () => {
               type="date"
               placeholder="Min Date"
               className={styles.additionalInput}
+              value={questions[index].Min}
               onChange={(e) =>
                 handleQuestionChange(index, 'Min', e.target.value)
               }
@@ -248,6 +251,7 @@ const DynamicQuestionnaire: React.FC = () => {
               type="date"
               placeholder="Max Date"
               className={styles.additionalInput}
+              value={questions[index].Max}
               onChange={(e) =>
                 handleQuestionChange(index, 'Max', e.target.value)
               }
@@ -257,6 +261,7 @@ const DynamicQuestionnaire: React.FC = () => {
                 type="checkbox"
                 id={`required-${type}-${index}`}
                 className={styles.checkbox}
+                checked={questions[index].Required}
                 onChange={(e) =>
                   handleQuestionChange(index, 'Required', e.target.checked)
                 }
