@@ -1,13 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // Import the Question and Answer types
-import { Question, Answer } from '@/types/QuestionnaireTypes'; // Update the path accordingly
+import { Question, Answer, ModalData } from '@/types/QuestionnaireTypes'; // Update the path accordingly
 
 export function useQuestionnaire() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [jsonOutput, setJsonOutput] = useState('');
   const [value, setValue] = useState('0');
   const [answerValue, setAnswerValue] = useState('0');
+  const [showModal, setShowModal] = useState(false);
+  const [isDataFromURL, setIsDataFromURL] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(isDataFromURL);
+  const [modalData, setModalData] = useState<ModalData>({
+    accountName: '',
+    requestType: '',
+    sameAffiliate: '',
+    campaignType: '',
+    atsType: '',
+    campaigns: [],
+  });
 
   const addQuestion = () => {
     const newQuestionID = (questions.length + 1).toString();
@@ -105,5 +116,13 @@ export function useQuestionnaire() {
     setValue,
     setJsonOutput,
     setQuestions,
+    showModal,
+    setShowModal,
+    modalData,
+    setModalData,
+    isDataFromURL,
+    setIsDataFromURL,
+    showViewModal,
+    setShowViewModal,
   };
 }
