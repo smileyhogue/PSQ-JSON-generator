@@ -321,7 +321,6 @@ const DynamicQuestionnaire: React.FC = () => {
     copyToClipboard(shareableUrl);
     setShowModal(false); // Close the modal
   };
-  console.log('questions', questions);
   return (
     <div>
       <div className={styles.questionsContainer}>
