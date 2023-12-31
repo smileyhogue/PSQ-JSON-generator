@@ -413,7 +413,10 @@ const DynamicQuestionnaire: React.FC = () => {
           Copy Shareable URL
         </Button>
         {isDataFromURL && (
-          <Button onClick={() => setShowViewModal(true)}>
+          <Button
+            onClick={() => setShowViewModal(true)}
+            className={styles.modalButton}
+          >
             View Modal Info
           </Button>
         )}
