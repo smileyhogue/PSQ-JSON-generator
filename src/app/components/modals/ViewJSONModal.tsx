@@ -19,19 +19,19 @@ const JsonViewModal: React.FC<JsonViewModalProps> = ({
   const handleCopyJson = async () => {
     try {
       await navigator.clipboard.writeText(jsonData);
-      setButtonColor('#96C13C'); // Green color for success
+      setButtonColor('#96C13C');
       setButtonText('JSON Copied!');
       setTimeout(() => {
-        setButtonColor('#35B0C9'); // Revert color after 2 seconds
-        setButtonText('Copy JSON'); // Revert text after 2 seconds
+        setButtonColor('#35B0C9');
+        setButtonText('Copy JSON');
       }, 2000);
     } catch (err) {
       console.error('Failed to copy JSON: ', err);
-      setButtonColor('#ff4d4f'); // Red color for error
+      setButtonColor('#ff4d4f');
       setButtonText('Error');
       setTimeout(() => {
-        setButtonColor('#35B0C9'); // Revert color after 2 seconds
-        setButtonText('Copy JSON'); // Revert text after 2 seconds
+        setButtonColor('#35B0C9');
+        setButtonText('Copy JSON');
       }, 2000);
     }
   };

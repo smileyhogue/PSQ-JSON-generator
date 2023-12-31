@@ -1,13 +1,10 @@
 'use client';
 import React, { useEffect } from 'react';
-import { useQuestionnaire } from '@/components/hooks/useQuestionnaire';
-import {
-  generateShareableUrl,
-  copyToClipboard,
-  parseQueryString,
-} from '../utils/questionnaireSerializer';
-import { QuestionType, ModalData } from '@/types/QuestionnaireTypes'; // Update the import path accordingly
-import styles from '../styles/DynamicQuestionnaire.module.css';
+// modals
+import ShareModal from '@/components/modals/ShareModal';
+import ViewModalInfo from '@/components/modals/ViewModalInfo';
+import JsonViewModal from '@/components/modals/ViewJSONModal';
+// ShadCN components
 import {
   Accordion,
   AccordionContent,
@@ -15,7 +12,6 @@ import {
   AccordionTrigger,
 } from './ui/accordion';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -26,9 +22,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import ShareModal from '@/components/modals/ShareModal';
-import ViewModalInfo from '@/components/modals/ViewModalInfo';
-import JsonViewModal from '@/components/modals/ViewJSONModal';
+// hooks
+import { useQuestionnaire } from '@/components/hooks/useQuestionnaire';
+// utils
+import {
+  generateShareableUrl,
+  copyToClipboard,
+  parseQueryString,
+} from '../utils/questionnaireSerializer';
+// types
+import { QuestionType, ModalData } from '@/types/QuestionnaireTypes';
+// styles
+import styles from '../styles/DynamicQuestionnaire.module.css';
 
 const DynamicQuestionnaire: React.FC = () => {
   const {
@@ -55,17 +60,15 @@ const DynamicQuestionnaire: React.FC = () => {
     showViewModal,
     setShowViewModal,
     showJsonModal,
-    setShowJsonModal,
     toggleShowJsonModal,
   } = useQuestionnaire();
-
   const formatOptions = ['integer', 'text'];
 
   useEffect(() => {
     const urlData = parseQueryString();
     if (urlData) {
       setQuestions(urlData.questions);
-      setModalData(urlData.modalData); // Ensure modalData includes atsType
+      setModalData(urlData.modalData);
       setShowViewModal(true);
       setIsDataFromURL(true);
     }
@@ -81,17 +84,15 @@ const DynamicQuestionnaire: React.FC = () => {
     const initialState = parseQueryString();
     if (initialState) {
       setQuestions(initialState.questions);
-      setModalData(initialState.modalData); // Set the modal data state
+      setModalData(initialState.modalData);
     }
   }, [setQuestions, setModalData]);
 
   useEffect(() => {
     const jsonQuestions = questions.map(
       ({ additionalFields, Answers, Format, ...question }) => {
-        // Set Format to null if it's 'text'
         const adjustedFormat = Format === 'text' ? '' : Format;
 
-        // Include Answers for certain question types
         const adjustedQuestion =
           question.QuestionType !== 'MultiSelect' &&
           question.QuestionType !== 'SingleSelect'
@@ -268,7 +269,6 @@ const DynamicQuestionnaire: React.FC = () => {
         );
       case 'Date':
         return (
-          // TODO: fix dates and required boxes to use the value from the json
           <>
             <input
               type="date"
@@ -319,7 +319,7 @@ const DynamicQuestionnaire: React.FC = () => {
     };
     const shareableUrl = generateShareableUrl(combinedData);
     copyToClipboard(shareableUrl);
-    setShowModal(false); // Close the modal
+    setShowModal(false);
   };
   return (
     <div>

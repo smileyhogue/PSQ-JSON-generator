@@ -21,7 +21,7 @@ export interface Question {
   Limit: number;
   Format: string;
   Answers: Answer[];
-  additionalFields?: any; // You can specify the type for additionalFields here
+  additionalFields?: any;
 }
 
 export interface SimplifiedQuestion {
@@ -41,9 +41,6 @@ export interface SimplifiedAnswer {
   at?: string;
 }
 
-// Define the structure of your modal data
-
-// Combined state including both questions and modal data
 export interface CombinedState {
   questions: Question[];
   modalData: ModalData;
@@ -51,18 +48,18 @@ export interface CombinedState {
 
 export interface ModalData {
   accountName: string;
-  requestType: string; // "New Launch" or "Existing Campaign"
-  sameAffiliate: string; // "Yes" or "No"
-  campaignType: string; // "PandoLogic + Easy Apply" or "A supported ATS"
-  atsType?: string; // Optional, based on campaignType selection
-  campaigns: string[]; // Array of campaign names or identifiers
+  requestType: string;
+  sameAffiliate: string;
+  campaignType: string;
+  atsType?: string;
+  campaigns: string[];
 }
 
 export interface SimplifiedModalData {
-  an: string; // Shortened from accountName
-  rt: string; // Shortened from requestType
-  sa: string; // Shortened from sameAffiliate
-  ct: string; // Shortened from campaignType
-  at?: string; // Shortened from atsType
-  cs: string[]; // Shortened from campaigns
+  an: string;
+  rt: string;
+  sa: string;
+  ct: string;
+  at?: string;
+  cs: string[];
 }

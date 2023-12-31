@@ -12,7 +12,7 @@ import {
 
 interface CombinedState {
   questions: Question[];
-  modalData: ModalData; // Define this type based on your modal data structure
+  modalData: ModalData;
 }
 
 const expandModalData = (
@@ -28,7 +28,6 @@ const expandModalData = (
   };
 };
 
-// Serialize the state to a compressed query string
 export const serializeStateToQueryString = (
   combinedState: CombinedState
 ): string => {
@@ -39,7 +38,6 @@ export const serializeStateToQueryString = (
   return compressToEncodedURIComponent(JSON.stringify(simplifiedState));
 };
 
-// Deserialize the query string into state
 export const parseQueryString = (): CombinedState | null => {
   if (typeof window !== 'undefined') {
     const urlParams = new URLSearchParams(window.location.search);
@@ -58,7 +56,6 @@ export const parseQueryString = (): CombinedState | null => {
   return null;
 };
 
-// Simplify the state for serialization
 const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
   return state
     .map(
@@ -103,15 +100,14 @@ const simplifyModalData = (modalData: ModalData): SimplifiedModalData => {
   };
 };
 
-// Expand the simplified state into the original state
 export const expandState = (
   simplifiedState: SimplifiedQuestion[]
 ): Question[] => {
   return simplifiedState.map(({ i, t, qt, r, mi, ma, l, f, d }) => ({
     ExtQuestionID: i || '',
     QuestionText: t || '',
-    QuestionType: qt as QuestionType, // Type assertion here
-    Required: r === true, // Convert to boolean
+    QuestionType: qt as QuestionType,
+    Required: r === true,
     Min: mi || '',
     Max: ma || '',
     Limit: l || 0,
@@ -122,7 +118,6 @@ export const expandState = (
   }));
 };
 
-// Generate a shareable URL with the serialized state
 export const generateShareableUrl = (combinedState: CombinedState): string => {
   if (typeof window !== 'undefined') {
     const queryString = serializeStateToQueryString(combinedState);
@@ -131,7 +126,6 @@ export const generateShareableUrl = (combinedState: CombinedState): string => {
   return '';
 };
 
-// Copy the shareable URL to the clipboard
 export const copyToClipboard = async (url: string) => {
   if (typeof window !== 'undefined') {
     try {

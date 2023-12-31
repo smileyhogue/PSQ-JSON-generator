@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-// Import the Question and Answer types
 import { Question, Answer, ModalData } from '@/types/QuestionnaireTypes'; // Update the path accordingly
 
 export function useQuestionnaire() {

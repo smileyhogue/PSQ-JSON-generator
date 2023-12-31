@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/styles/ViewModalInfo.module.css'; // Ensure to create this CSS module
+import styles from '@/styles/ViewModalInfo.module.css';
 import { ModalData } from '@/types/QuestionnaireTypes';
 
 interface ViewModalInfoProps {

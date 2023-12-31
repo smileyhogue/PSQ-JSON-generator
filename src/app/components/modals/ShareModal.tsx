@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '@/styles/ShareModal.module.css'; // Ensure to create this CSS module
+import styles from '@/styles/ShareModal.module.css';
 import { ModalData } from '@/types/QuestionnaireTypes';
 
 export interface RequestInfoModalProps {
