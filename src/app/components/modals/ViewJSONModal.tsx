@@ -44,16 +44,9 @@ const JsonViewModal: React.FC<JsonViewModalProps> = ({
         <div className={styles.modalHeader}>
           <h3>JSON Data</h3>
           <div>
-            <Button
-              onClick={handleCopyJson}
-              style={{
-                backgroundColor: buttonColor,
-                transition: 'background-color 0.3s',
-              }}
-            >
-              {buttonText}
-            </Button>
-            <Button onClick={onClose}>&times;</Button>
+            <button onClick={onClose} className={styles.closeButton}>
+              &times;
+            </button>
           </div>
         </div>
         <div className={styles.modalContent}>
@@ -63,6 +56,16 @@ const JsonViewModal: React.FC<JsonViewModalProps> = ({
             readOnly
           ></textarea>
         </div>
+        <Button
+          onClick={handleCopyJson}
+          style={{
+            backgroundColor: buttonColor,
+            transition: 'background-color 0.3s',
+            marginRight: '1rem',
+          }}
+        >
+          {buttonText}
+        </Button>
       </div>
     </div>
   );

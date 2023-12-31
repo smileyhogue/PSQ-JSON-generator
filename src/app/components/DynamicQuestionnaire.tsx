@@ -328,10 +328,13 @@ const DynamicQuestionnaire: React.FC = () => {
           {questions.map((question, index) => (
             <AccordionItem key={index} value={index.toString()}>
               <AccordionTrigger>
-                {question.QuestionText || `Question ${index + 1}`}
+                <span className={styles.questionText}>
+                  {question.QuestionText || `Question ${index + 1}`}
+                </span>
                 <Button
                   onClick={() => deleteQuestion(index)}
                   variant="destructive"
+                  className={styles.deleteButton}
                 >
                   Delete
                 </Button>

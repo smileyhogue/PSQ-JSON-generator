@@ -1,23 +1,28 @@
 
-/* Container style */
 .questionContainer {
   margin-bottom: 20px;
-  border: 1px solid #e6e6e6; /* Lighter border color */
+  border: 1px solid #e6e6e6;
   padding: 10px;
-  border-radius: 4px; /* Reduced border-radius */
-  background-color: #fff; /* White background */
-  box-shadow: none; /* No box-shadow for a flat design */
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: none;
 }
 
-/* Input and Select fields */
+.AccordionTrigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .questionInput, .questionSelect, .additionalInput, .additionalTextarea {
   padding: 8px 12px;
   margin-bottom: 10px;
-  border: 1px solid #ccc; /* Light gray border */
-  border-radius: 4px; /* Consistent border-radius */
-  background-color: #fff; /* White background */
-  color: #333; /* Darker text color for contrast */
-  font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern sans-serif font */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Buttons */
@@ -25,33 +30,33 @@
   padding: 10px 15px;
   margin-top: 10px;
   border: none;
-  border-radius: 4px; /* Consistent border-radius */
-  background-color: #35B0C9; /* Blue background */
-  color: #fff; /* White text */
-  font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern sans-serif font */
+  border-radius: 4px;
+  background-color: #35B0C9;
+  color: #fff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  transition: background-color 0.3s ease;
 }
 
 .modalButton {
   padding: 10px 15px;
   margin-top: 10px;
   border: none;
-  border-radius: 4px; /* Consistent border-radius */
-  background-color: #818486; /* Blue background */
-  color: #fff; /* White text */
-  font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern sans-serif font */
+  border-radius: 4px;
+  background-color: #818486;
+  color: #fff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  transition: background-color 0.3s ease;
 }
 
 .questionButton:hover {
-  background-color: #25899a; /* Slightly darker blue on hover */
+  background-color: #25899a;
 }
 
 .addQuestionButtonContainer {
-  margin-top: 0px; /* Space above the button */
-  margin-bottom: 40px; /* Space between this and bottom buttons */
+  margin-top: 0px;
+  margin-bottom: 40px;
   display: flex;
   justify-content: center;
 }
@@ -59,12 +64,16 @@
 .bottomButtonContainer {
   display: flex;
   justify-content: center;
-  gap: 10px; /* Space between buttons */
+  gap: 10px;
 }
 
-/* Optional: Adjust the button styles if needed */
 .questionButton, .modalButton {
   padding: 10px 15px;
   border-radius: 4px;
   font-size: 16px;
+}
+
+.deleteButton {
+  margin-left: auto;
+  margin-right: 2rem;
 }

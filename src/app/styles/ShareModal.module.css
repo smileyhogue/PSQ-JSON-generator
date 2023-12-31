@@ -53,7 +53,7 @@
 }
 
 .addButton, .submitButton {
-  background-color: #007bff;
+  background-color: #35B0C9;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -63,7 +63,7 @@
 }
 
 .addButton:hover, .submitButton:hover {
-  background-color: #0056b3;
+  background-color: #35B0C9;
 }
 
 .campaignContainer {
