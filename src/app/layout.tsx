@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'PSQ Generator',
-  description: 'hi!',
+  description: 'Generate PSQ JSON',
 };
 
 export default function RootLayout({
