@@ -1,106 +1,70 @@
+
+/* Container style */
 .questionContainer {
   margin-bottom: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid #e6e6e6; /* Lighter border color */
   padding: 10px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px; /* Reduced border-radius */
+  background-color: #fff; /* White background */
+  box-shadow: none; /* No box-shadow for a flat design */
 }
 
+/* Input and Select fields */
 .questionInput, .questionSelect, .additionalInput, .additionalTextarea {
   padding: 8px 12px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  color: black; /* Ensure text is black for visibility */
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 4px; /* Consistent border-radius */
+  background-color: #fff; /* White background */
+  color: #333; /* Darker text color for contrast */
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern sans-serif font */
 }
 
-.questionInput, .additionalInput {
-  width: 60%;
-}
-
-.questionSelect {
-  width: 35%;
-  margin-left: 0%;
-}
-
-.additionalTextarea {
-  width: 100%;
-  height: 100px; /* Adjust height as needed */
-}
-
-.additionalFields {
-  margin-top: 10px;
-}
-
-.addButton {
+/* Buttons */
+.questionButton {
   padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
+  margin-top: 10px;
   border: none;
-  border-radius: 4px;
+  border-radius: 4px; /* Consistent border-radius */
+  background-color: #35B0C9; /* Blue background */
+  color: #fff; /* White text */
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern sans-serif font */
   cursor: pointer;
-  font-size: 16px;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
-.addButton:hover {
-  background-color: #0056b3;
+.modalButton {
+  padding: 10px 15px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px; /* Consistent border-radius */
+  background-color: #818486; /* Blue background */
+  color: #fff; /* White text */
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern sans-serif font */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
-.checkboxContainer {
-  margin-top: 10px; /* Adjust as needed */
+.questionButton:hover {
+  background-color: #25899a; /* Slightly darker blue on hover */
+}
+
+.addQuestionButtonContainer {
+  margin-top: 0px; /* Space above the button */
+  margin-bottom: 40px; /* Space between this and bottom buttons */
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
-.checkbox {
-  margin-right: 5px;
+.bottomButtonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between buttons */
 }
 
-.checkboxLabel {
-    margin-left: 5px;
-    color: black; /* Set the label color to black (or any suitable color) */
-}
-
-.jsonOutput {
-  width: 100%;
-  height: 200px;
-  margin-top: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
+/* Optional: Adjust the button styles if needed */
+.questionButton, .modalButton {
+  padding: 10px 15px;
   border-radius: 4px;
-  background-color: white;
-  color: black;
-  font-family: monospace;
-}
-
-.smallButton {
-  margin-top: 10px;
-  padding: 8px 12px;
-  background-color: #007bff; /* Blue background */
-  color: white; /* White text */
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
-
-.smallButton:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-}
-
-.deleteButton {
-  padding: 6px 10px;
-  background-color: #dc3545; /* Red background */
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.deleteButton:hover {
-  background-color: #c82333; /* Darker red on hover */
+  font-size: 16px;
 }
