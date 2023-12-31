@@ -19,6 +19,11 @@ export function useQuestionnaire() {
     atsType: '',
     campaigns: [],
   });
+  const [showJsonModal, setShowJsonModal] = useState(false);
+
+  const toggleShowJsonModal = () => {
+    setShowJsonModal(!showJsonModal);
+  };
 
   const addQuestion = () => {
     const newQuestionID = (questions.length + 1).toString();
@@ -124,5 +129,8 @@ export function useQuestionnaire() {
     setIsDataFromURL,
     showViewModal,
     setShowViewModal,
+    showJsonModal,
+    setShowJsonModal,
+    toggleShowJsonModal,
   };
 }

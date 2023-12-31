@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/select';
 import ShareModal from '@/components/modals/ShareModal';
 import ViewModalInfo from '@/components/modals/ViewModalInfo';
+import JsonViewModal from '@/components/modals/ViewJSONModal';
 
 const DynamicQuestionnaire: React.FC = () => {
   const {
@@ -53,6 +54,9 @@ const DynamicQuestionnaire: React.FC = () => {
     setIsDataFromURL,
     showViewModal,
     setShowViewModal,
+    showJsonModal,
+    setShowJsonModal,
+    toggleShowJsonModal,
   } = useQuestionnaire();
 
   const formatOptions = ['integer', 'text'];
@@ -65,7 +69,13 @@ const DynamicQuestionnaire: React.FC = () => {
       setShowViewModal(true);
       setIsDataFromURL(true);
     }
-  }, [setQuestions, setModalData, setShowModal, setIsDataFromURL]);
+  }, [
+    setQuestions,
+    setModalData,
+    setShowModal,
+    setIsDataFromURL,
+    setShowViewModal,
+  ]);
 
   useEffect(() => {
     const initialState = parseQueryString();
@@ -205,8 +215,8 @@ const DynamicQuestionnaire: React.FC = () => {
                   <AccordionTrigger>
                     {answer.AnswerText || `Answer ${answerIndex + 1}`}
                     <Button
+                      variant="destructive"
                       onClick={() => deleteAnswer(index, answerIndex)}
-                      className={styles.deleteButton}
                     >
                       Delete Answer
                     </Button>
@@ -248,6 +258,7 @@ const DynamicQuestionnaire: React.FC = () => {
             </Accordion>
             <Button
               variant="outline"
+              className={styles.questionButton}
               onClick={() => addAnswer(index)}
               //className={styles.smallButton}
             >
@@ -313,76 +324,101 @@ const DynamicQuestionnaire: React.FC = () => {
   console.log('questions', questions);
   return (
     <div>
-      <Accordion type="single" value={value} onValueChange={setValue}>
-        {questions.map((question, index) => (
-          <AccordionItem key={index} value={index.toString()}>
-            <AccordionTrigger>
-              {question.QuestionText || `Question ${index + 1}`}
-              <Button
-                onClick={() => deleteQuestion(index)}
-                variant="destructive"
-              >
-                Delete
-              </Button>
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className={styles.questionContainer}>
-                <Input
-                  type="text"
-                  value={question.ExtQuestionID}
-                  onChange={(e) =>
-                    handleQuestionChange(index, 'ExtQuestionID', e.target.value)
-                  }
-                  className={styles.questionInput}
-                />
-                <Input
-                  type="text"
-                  value={question.QuestionText}
-                  placeholder="Question Text"
-                  onChange={(e) =>
-                    handleQuestionChange(index, 'QuestionText', e.target.value)
-                  }
-                  className={styles.questionInput}
-                />
-                <Select
-                  value={question.QuestionType}
-                  onValueChange={(newValue) =>
-                    handleQuestionChange(index, 'QuestionType', newValue)
-                  }
+      <div className={styles.questionsContainer}>
+        <Accordion type="single" value={value} onValueChange={setValue}>
+          {questions.map((question, index) => (
+            <AccordionItem key={index} value={index.toString()}>
+              <AccordionTrigger>
+                {question.QuestionText || `Question ${index + 1}`}
+                <Button
+                  onClick={() => deleteQuestion(index)}
+                  variant="destructive"
                 >
-                  <SelectTrigger className={styles.questionSelect}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Types</SelectLabel>
-                      <SelectItem value="Text">Text</SelectItem>
-                      <SelectItem value="TextArea">TextArea</SelectItem>
-                      <SelectItem value="MultiSelect">MultiSelect</SelectItem>
-                      <SelectItem value="SingleSelect">SingleSelect</SelectItem>
-                      <SelectItem value="Date">Date</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <div className={styles.additionalFields}>
-                  {getAdditionalFields(question.QuestionType, index)}
+                  Delete
+                </Button>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className={styles.questionContainer}>
+                  <Input
+                    type="text"
+                    value={question.ExtQuestionID}
+                    onChange={(e) =>
+                      handleQuestionChange(
+                        index,
+                        'ExtQuestionID',
+                        e.target.value
+                      )
+                    }
+                    className={styles.questionInput}
+                  />
+                  <Input
+                    type="text"
+                    value={question.QuestionText}
+                    placeholder="Question Text"
+                    onChange={(e) =>
+                      handleQuestionChange(
+                        index,
+                        'QuestionText',
+                        e.target.value
+                      )
+                    }
+                    className={styles.questionInput}
+                  />
+                  <Select
+                    value={question.QuestionType}
+                    onValueChange={(newValue) =>
+                      handleQuestionChange(index, 'QuestionType', newValue)
+                    }
+                  >
+                    <SelectTrigger className={styles.questionSelect}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Types</SelectLabel>
+                        <SelectItem value="Text">Text</SelectItem>
+                        <SelectItem value="TextArea">TextArea</SelectItem>
+                        <SelectItem value="MultiSelect">MultiSelect</SelectItem>
+                        <SelectItem value="SingleSelect">
+                          SingleSelect
+                        </SelectItem>
+                        <SelectItem value="Date">Date</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <div className={styles.additionalFields}>
+                    {getAdditionalFields(question.QuestionType, index)}
+                  </div>
                 </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-      <Button variant="outline" onClick={addQuestion}>
-        Add Question
-      </Button>
-      <div>
-        <h3>Generated JSON:</h3>
-        <Textarea value={jsonOutput} readOnly className={styles.jsonOutput} />
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+        <Button
+          variant="outline"
+          onClick={addQuestion}
+          className={styles.questionButton}
+        >
+          Add Question
+        </Button>
       </div>
-      <Button onClick={() => setShowModal(true)}>Copy Shareable URL</Button>
-      {isDataFromURL && (
-        <Button onClick={() => setShowViewModal(true)}>View Modal Info</Button>
-      )}
+
+      <div className={styles.bottomButtonContainer}>
+        <Button onClick={toggleShowJsonModal} className={styles.modalButton}>
+          View JSON
+        </Button>
+        <Button
+          onClick={() => setShowModal(true)}
+          className={styles.modalButton}
+        >
+          Copy Shareable URL
+        </Button>
+        {isDataFromURL && (
+          <Button onClick={() => setShowViewModal(true)}>
+            View Modal Info
+          </Button>
+        )}
+      </div>
       <ViewModalInfo
         showModal={showViewModal}
         onClose={() => setShowViewModal(false)}
@@ -393,6 +429,11 @@ const DynamicQuestionnaire: React.FC = () => {
         onClose={() => setShowModal(false)}
         onCopyURL={handleModalSubmit}
         initialData={modalData}
+      />
+      <JsonViewModal
+        show={showJsonModal}
+        onClose={toggleShowJsonModal}
+        jsonData={jsonOutput}
       />
     </div>
   );
