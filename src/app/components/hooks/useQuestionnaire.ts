@@ -105,6 +105,59 @@ export function useQuestionnaire() {
     setQuestions(updatedQuestions);
   };
 
+  const validateQuestions = () => {
+    const errors: string[] = [];
+    questions.forEach((question, index) => {
+      if (!question.QuestionText.trim()) {
+        errors.push(`Question ${index + 1} Text is required`);
+      }
+      if (!question.ExtQuestionID.trim()) {
+        errors.push(`Question ${index + 1} ID is required`);
+      }
+      if (question.QuestionType === 'MultiSelect') {
+        if (question.Answers.length < 2) {
+          errors.push(`Question ${index + 1} must have at least two answers`);
+        }
+      }
+      if (question.QuestionType === 'MultiSelect') {
+        if (question.Answers.length >= 2) {
+          question.Answers.forEach((answer, ansIndex) => {
+            if (!answer.AnswerText.trim()) {
+              errors.push(
+                `Question ${index + 1} Answer ${ansIndex + 1} is required`
+              );
+            }
+            if (!answer.ExtAnswerID.trim()) {
+              errors.push(
+                `Question ${index + 1} Answer ${ansIndex + 1} ID is required`
+              );
+            }
+          });
+        }
+      }
+      // Add other validation checks as needed
+    });
+    return errors;
+  };
+
+  const handleViewJsonModal = () => {
+    const errors = validateQuestions();
+    if (errors.length === 0) {
+      toggleShowJsonModal(); // This function toggles the state to show/hide the JSON modal
+    } else {
+      alert('Please fill in all required fields:\n' + errors.join('\n'));
+    }
+  };
+
+  const handleShareUrlModal = () => {
+    const errors = validateQuestions();
+    if (errors.length === 0) {
+      setShowModal(true); // This sets the state to show the Share URL modal
+    } else {
+      alert('Please fill in all required fields:\n' + errors.join('\n'));
+    }
+  };
+
   return {
     questions,
     jsonOutput,
@@ -131,5 +184,8 @@ export function useQuestionnaire() {
     showJsonModal,
     setShowJsonModal,
     toggleShowJsonModal,
+    validateQuestions,
+    handleViewJsonModal,
+    handleShareUrlModal,
   };
 }

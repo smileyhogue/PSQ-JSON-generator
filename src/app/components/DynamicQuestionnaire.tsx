@@ -61,6 +61,8 @@ const DynamicQuestionnaire: React.FC = () => {
     setShowViewModal,
     showJsonModal,
     toggleShowJsonModal,
+    handleShareUrlModal,
+    handleViewJsonModal,
   } = useQuestionnaire();
   const formatOptions = ['integer', 'text'];
 
@@ -432,13 +434,10 @@ const DynamicQuestionnaire: React.FC = () => {
       </div>
 
       <div className={styles.bottomButtonContainer}>
-        <Button onClick={toggleShowJsonModal} className={styles.modalButton}>
+        <Button onClick={handleViewJsonModal} className={styles.modalButton}>
           View JSON
         </Button>
-        <Button
-          onClick={() => setShowModal(true)}
-          className={styles.modalButton}
-        >
+        <Button onClick={handleShareUrlModal} className={styles.modalButton}>
           Copy Shareable URL
         </Button>
         {isDataFromURL && (

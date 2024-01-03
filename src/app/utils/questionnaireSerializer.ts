@@ -47,7 +47,7 @@ const simplifyModalData = (modalData: ModalData): SimplifiedModalData => {
   return {
     an: modalData.accountName,
     rt: requestTypeMapping[modalData.requestType],
-    sa: modalData.sameAffiliate ? 'y' : 'n',
+    sa: modalData.sameAffiliate,
     ct: campaignTypeMapping[modalData.campaignType],
     at: modalData.atsType,
     cs: modalData.campaigns,
