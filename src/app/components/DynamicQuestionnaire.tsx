@@ -127,6 +127,14 @@ const DynamicQuestionnaire: React.FC = () => {
       </select>
     );
 
+    const isUnlimited = currentQuestion.Limit === 0;
+
+    const handleLimitChange = (e: any) => {
+      // If the checkbox is checked, set the limit to 0, otherwise use the number input's value
+      const limitValue = e.target.checked ? 0 : parseInt(e.target.value);
+      handleQuestionChange(index, 'Limit', limitValue);
+    };
+
     switch (type) {
       case 'Text':
       case 'TextArea':
@@ -174,15 +182,33 @@ const DynamicQuestionnaire: React.FC = () => {
               </>
             )}
             {currentQuestion.Format === 'text' && (
-              <Input
-                type="number"
-                placeholder="Character Limit"
-                value={currentQuestion.Limit}
-                onChange={(e) =>
-                  handleQuestionChange(index, 'Limit', parseInt(e.target.value))
-                }
-                className={styles.questionInput}
-              />
+              <>
+                <div className={styles.checkboxContainer}>
+                  <input
+                    type="checkbox"
+                    id={`unlimited-${index}`}
+                    className={styles.checkbox}
+                    checked={isUnlimited}
+                    onChange={(e) => handleLimitChange(e)}
+                  />
+                  <label
+                    htmlFor={`unlimited-${index}`}
+                    className={styles.checkboxLabel}
+                  >
+                    Unlimited characters
+                  </label>
+                </div>
+
+                {!isUnlimited && (
+                  <Input
+                    type="number"
+                    placeholder="Character Limit"
+                    value={currentQuestion.Limit}
+                    onChange={(e) => handleLimitChange(e)}
+                    className={styles.questionInput}
+                  />
+                )}
+              </>
             )}
           </>
         );
