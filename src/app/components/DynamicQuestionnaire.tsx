@@ -309,42 +309,51 @@ const DynamicQuestionnaire: React.FC = () => {
 
             {currentQuestion.Format === 'integer' && (
               <>
-                <Input
-                  type="number"
-                  placeholder="Min Value"
-                  value={currentQuestion.Min}
-                  onChange={(e) =>
-                    handleQuestionChange(index, 'Min', e.target.value)
-                  }
-                  className={styles.questionInput}
-                />
-                <Input
-                  type="number"
-                  placeholder="Max Value"
-                  value={currentQuestion.Max}
-                  onChange={(e) =>
-                    handleQuestionChange(index, 'Max', e.target.value)
-                  }
-                  className={styles.questionInput}
-                />
+                <div className={styles.tooltipInputContainer}>
+                  <Input
+                    type="number"
+                    placeholder="Min Value"
+                    value={currentQuestion.Min}
+                    onChange={(e) =>
+                      handleQuestionChange(index, 'Min', e.target.value)
+                    }
+                    className={styles.questionInput}
+                  />
+                  <TooltipComponent content="Minimum value allowed for the answer" />
+                </div>
+                <div className={styles.tooltipInputContainer}>
+                  <Input
+                    type="number"
+                    placeholder="Max Value"
+                    value={currentQuestion.Max}
+                    onChange={(e) =>
+                      handleQuestionChange(index, 'Max', e.target.value)
+                    }
+                    className={styles.questionInput}
+                  />
+                  <TooltipComponent content="Maximum value allowed for the answer" />
+                </div>
               </>
             )}
             {currentQuestion.Format === 'text' && (
               <>
-                <div className={styles.checkboxContainer}>
-                  <input
-                    type="checkbox"
-                    id={`unlimited-${index}`}
-                    className={styles.checkbox}
-                    checked={isUnlimited}
-                    onChange={(e) => handleLimitChange(e)}
-                  />
-                  <label
-                    htmlFor={`unlimited-${index}`}
-                    className={styles.checkboxLabel}
-                  >
-                    Unlimited characters
-                  </label>
+                <div className={styles.tooltipInputContainer}>
+                  <div className={styles.checkboxContainer}>
+                    <input
+                      type="checkbox"
+                      id={`unlimited-${index}`}
+                      className={styles.checkbox}
+                      checked={isUnlimited}
+                      onChange={(e) => handleLimitChange(e)}
+                    />
+                    <label
+                      htmlFor={`unlimited-${index}`}
+                      className={styles.checkboxLabel}
+                    >
+                      Unlimited characters
+                    </label>
+                  </div>
+                  <TooltipComponent content="Should the applicant be able to type an unlimited number of characters?" />
                 </div>
 
                 {!isUnlimited && (
@@ -365,21 +374,24 @@ const DynamicQuestionnaire: React.FC = () => {
       case 'SingleSelect':
         return (
           <>
-            <input
-              type="checkbox"
-              id={`required-${type}-${index}`}
-              className={styles.checkbox}
-              checked={questions[index].Required}
-              onChange={(e) =>
-                handleQuestionChange(index, 'Required', e.target.checked)
-              }
-            />
-            <label
-              htmlFor={`required-${type}-${index}`}
-              className={styles.checkboxLabel}
-            >
-              Required
-            </label>
+            <div className={styles.tooltipInputContainer}>
+              <input
+                type="checkbox"
+                id={`required-${type}-${index}`}
+                className={styles.checkbox}
+                checked={questions[index].Required}
+                onChange={(e) =>
+                  handleQuestionChange(index, 'Required', e.target.checked)
+                }
+              />
+              <label
+                htmlFor={`required-${type}-${index}`}
+                className={styles.checkboxLabel}
+              >
+                Required
+              </label>
+              <TooltipComponent content="Is the user required to answer this question?" />
+            </div>
 
             <Accordion
               type="single"
