@@ -39,6 +39,7 @@ import {
 } from '@/types/QuestionnaireTypes';
 // styles
 import styles from '../styles/DynamicQuestionnaire.module.css';
+import TooltipComponent from './ToolTip';
 
 const DynamicQuestionnaire: React.FC = () => {
   const {
@@ -286,21 +287,24 @@ const DynamicQuestionnaire: React.FC = () => {
           <>
             {formatDropdown}
             <div className={styles.checkboxContainer}>
-              <input
-                type="checkbox"
-                id={`required-${type}-${index}`}
-                className={styles.checkbox}
-                checked={questions[index].Required}
-                onChange={(e) =>
-                  handleQuestionChange(index, 'Required', e.target.checked)
-                }
-              />
-              <label
-                htmlFor={`required-${type}-${index}`}
-                className={styles.checkboxLabel}
-              >
-                Required
-              </label>
+              <div className={styles.tooltipInputContainer}>
+                <input
+                  type="checkbox"
+                  id={`required-${type}-${index}`}
+                  className={styles.checkbox}
+                  checked={questions[index].Required}
+                  onChange={(e) =>
+                    handleQuestionChange(index, 'Required', e.target.checked)
+                  }
+                />
+                <label
+                  htmlFor={`required-${type}-${index}`}
+                  className={styles.checkboxLabel}
+                >
+                  Required
+                </label>
+                <TooltipComponent content="Is the user required to answer this question?" />
+              </div>
             </div>
 
             {currentQuestion.Format === 'integer' && (
@@ -512,53 +516,68 @@ const DynamicQuestionnaire: React.FC = () => {
               </AccordionTrigger>
               <AccordionContent>
                 <div className={styles.questionContainer}>
-                  <Input
-                    type="text"
-                    value={question.ExtQuestionID}
-                    onChange={(e) =>
-                      handleQuestionChange(
-                        index,
-                        'ExtQuestionID',
-                        e.target.value
-                      )
-                    }
-                    className={styles.questionInput}
-                  />
-                  <Input
-                    type="text"
-                    value={question.QuestionText}
-                    placeholder="Question Text"
-                    onChange={(e) =>
-                      handleQuestionChange(
-                        index,
-                        'QuestionText',
-                        e.target.value
-                      )
-                    }
-                    className={styles.questionInput}
-                  />
-                  <Select
-                    value={question.QuestionType}
-                    onValueChange={(newValue) =>
-                      handleQuestionChange(index, 'QuestionType', newValue)
-                    }
-                  >
-                    <SelectTrigger className={styles.questionSelect}>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Types</SelectLabel>
-                        <SelectItem value="Text">Text</SelectItem>
-                        <SelectItem value="TextArea">TextArea</SelectItem>
-                        <SelectItem value="MultiSelect">MultiSelect</SelectItem>
-                        <SelectItem value="SingleSelect">
-                          SingleSelect
-                        </SelectItem>
-                        <SelectItem value="Date">Date</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <div className={styles.tooltipInputContainer}>
+                    <Input
+                      type="text"
+                      value={question.ExtQuestionID}
+                      onChange={(e) =>
+                        handleQuestionChange(
+                          index,
+                          'ExtQuestionID',
+                          e.target.value
+                        )
+                      }
+                      className={styles.questionInput}
+                    />
+                    <TooltipComponent
+                      content="Question ID. This is used for the system to identify
+                            unique questions and to identify condition
+                            questions. This value must be unique."
+                    />
+                  </div>
+                  <div className={styles.tooltipInputContainer}>
+                    <Input
+                      type="text"
+                      value={question.QuestionText}
+                      placeholder="Question Text"
+                      onChange={(e) =>
+                        handleQuestionChange(
+                          index,
+                          'QuestionText',
+                          e.target.value
+                        )
+                      }
+                      className={styles.questionInput}
+                    />
+                    <TooltipComponent content="This will be the question that is displayed to the user." />
+                  </div>
+                  <div className={styles.tooltipInputContainer}>
+                    <Select
+                      value={question.QuestionType}
+                      onValueChange={(newValue) =>
+                        handleQuestionChange(index, 'QuestionType', newValue)
+                      }
+                    >
+                      <SelectTrigger className={styles.questionSelect}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Types</SelectLabel>
+                          <SelectItem value="Text">Text</SelectItem>
+                          <SelectItem value="TextArea">TextArea</SelectItem>
+                          <SelectItem value="MultiSelect">
+                            MultiSelect
+                          </SelectItem>
+                          <SelectItem value="SingleSelect">
+                            SingleSelect
+                          </SelectItem>
+                          <SelectItem value="Date">Date</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <TooltipComponent content="Type of answer allowed for the user" />
+                  </div>
                   <div className={styles.additionalFields}>
                     {getAdditionalFields(question.QuestionType, index)}
                   </div>
