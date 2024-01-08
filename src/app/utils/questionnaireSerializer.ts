@@ -7,6 +7,7 @@ import {
   QuestionType,
   SimplifiedQuestion,
   ModalData,
+  Condition,
 } from '@/types/QuestionnaireTypes';
 
 interface SimplifiedModalData {
@@ -79,6 +80,7 @@ const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
       Limit,
       Format,
       Answers,
+      Condition,
     }) => ({
       i: ExtQuestionID,
       t: QuestionText,
@@ -89,6 +91,9 @@ const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
       l: Limit,
       f: Format,
       d: Answers.map((a) => ({ aid: a.ExtAnswerID, at: a.AnswerText })),
+      c: Condition
+        ? { qid: Condition.ExtQuestionID, av: Condition.AnswerValue }
+        : undefined,
     })
   );
 };
@@ -96,7 +101,7 @@ const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
 export const expandState = (
   simplifiedState: SimplifiedQuestion[]
 ): Question[] => {
-  return simplifiedState.map(({ i, t, qt, r, mi, ma, l, f, d }) => ({
+  return simplifiedState.map(({ i, t, qt, r, mi, ma, l, f, d, c }) => ({
     ExtQuestionID: i || '',
     QuestionText: t || '',
     QuestionType: qt as QuestionType,
@@ -108,6 +113,7 @@ export const expandState = (
     Answers: d
       ? d.map((a) => ({ ExtAnswerID: a.aid || '', AnswerText: a.at || '' }))
       : [],
+    Condition: c ? { ExtQuestionID: c.qid, AnswerValue: c.av } : undefined,
   }));
 };
 

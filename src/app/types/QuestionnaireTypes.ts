@@ -11,6 +11,11 @@ export interface Answer {
   AnswerText: string;
 }
 
+export interface Condition {
+  ExtQuestionID?: string;
+  AnswerValue?: string;
+}
+
 export interface Question {
   ExtQuestionID: string;
   QuestionText: string;
@@ -22,6 +27,10 @@ export interface Question {
   Format: string;
   Answers: Answer[];
   additionalFields?: any;
+  Condition?: {
+    ExtQuestionID: string;
+    AnswerValue: string;
+  };
 }
 
 export interface SimplifiedQuestion {
@@ -34,8 +43,13 @@ export interface SimplifiedQuestion {
   l?: number;
   f?: string;
   d?: SimplifiedAnswer[];
+  c?: SimplifiedCondition;
 }
 
+export interface SimplifiedCondition {
+  qid: string; // Question ID for the condition
+  av: string; // Answer Value for the condition
+}
 export interface SimplifiedAnswer {
   aid?: string;
   at?: string;

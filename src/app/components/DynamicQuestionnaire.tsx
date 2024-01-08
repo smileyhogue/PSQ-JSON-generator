@@ -31,7 +31,12 @@ import {
   parseQueryString,
 } from '../utils/questionnaireSerializer';
 // types
-import { QuestionType, ModalData } from '@/types/QuestionnaireTypes';
+import {
+  QuestionType,
+  ModalData,
+  Condition,
+  Question,
+} from '@/types/QuestionnaireTypes';
 // styles
 import styles from '../styles/DynamicQuestionnaire.module.css';
 
@@ -136,7 +141,144 @@ const DynamicQuestionnaire: React.FC = () => {
       const limitValue = e.target.checked ? 0 : parseInt(e.target.value);
       handleQuestionChange(index, 'Limit', limitValue);
     };
+    // Start new conditional feature
+    const handleConditionalChange = (index: number, checked: boolean) => {
+      const updatedQuestions = [...questions];
+      if (checked) {
+        // Initialize the Condition object if checked
+        updatedQuestions[index].Condition = {
+          ExtQuestionID: '',
+          AnswerValue: '',
+        };
+      } else {
+        // Remove the Condition object if unchecked
+        delete updatedQuestions[index].Condition;
+      }
+      setQuestions(updatedQuestions);
+    };
 
+    const handleConditionDetailsChange = (
+      index: number,
+      field: keyof Condition,
+      value: string
+    ) => {
+      const updatedQuestions = [...questions];
+      if (!updatedQuestions[index].Condition) {
+        updatedQuestions[index].Condition = {
+          ExtQuestionID: '',
+          AnswerValue: '',
+        };
+      }
+
+      updatedQuestions[index].Condition![field] = value;
+
+      setQuestions(updatedQuestions);
+    };
+
+    const hasConditionalQuestions = (index: number): boolean => {
+      return questions
+        .slice(0, index)
+        .some(
+          (q) =>
+            q.QuestionType === 'MultiSelect' ||
+            q.QuestionType === 'SingleSelect'
+        );
+    };
+
+    const renderConditionalUI = (index: number): JSX.Element | null => {
+      // Filter questions to only include those before the current index
+      const previousQuestions = questions
+        .slice(0, index)
+        .filter(
+          (q) =>
+            q.QuestionType === 'MultiSelect' ||
+            q.QuestionType === 'SingleSelect'
+        );
+
+      // Check if there are any eligible previous questions for conditional logic
+      if (previousQuestions.length === 0) {
+        return null;
+      }
+
+      // Extract current question's Condition for easier access
+      const currentCondition: Condition = questions[index].Condition || {};
+
+      return (
+        <div className={styles.conditionalContainer}>
+          <div className={styles.checkboxContainer}>
+            <input
+              type="checkbox"
+              id={`conditional-${index}`}
+              className={styles.checkbox}
+              checked={!!questions[index].Condition}
+              onChange={(e) => handleConditionalChange(index, e.target.checked)}
+            />
+            <label
+              htmlFor={`conditional-${index}`}
+              className={styles.checkboxLabel}
+            >
+              Conditional
+            </label>
+          </div>
+
+          {questions[index].Condition && (
+            <>
+              <select
+                className={styles.select}
+                value={currentCondition.ExtQuestionID || ''}
+                onChange={(e) =>
+                  handleConditionDetailsChange(
+                    index,
+                    'ExtQuestionID',
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">Select Previous Question</option>
+                {previousQuestions.map((q, idx) => (
+                  <option key={idx} value={q.ExtQuestionID}>
+                    {q.QuestionText || `Question ${idx + 1}`}
+                  </option>
+                ))}
+              </select>
+
+              {currentCondition.ExtQuestionID && (
+                <select
+                  className={styles.select}
+                  value={currentCondition.AnswerValue || ''}
+                  onChange={(e) =>
+                    handleConditionDetailsChange(
+                      index,
+                      'AnswerValue',
+                      e.target.value
+                    )
+                  }
+                >
+                  <option value="">Select Answer</option>
+                  {renderAnswerOptions(currentCondition.ExtQuestionID)}
+                </select>
+              )}
+            </>
+          )}
+        </div>
+      );
+    };
+
+    const renderAnswerOptions = (questionID: string): JSX.Element[] => {
+      // Ensure that TypeScript recognizes the correct type for 'question'
+      const question = questions.find(
+        (q) => q.ExtQuestionID === questionID
+      ) as Question;
+      return (
+        question?.Answers?.map((answer, idx) => (
+          <option key={idx} value={answer.ExtAnswerID}>
+            {answer.AnswerText}
+          </option>
+        )) || []
+      );
+    };
+
+    // end new conditional feature
     switch (type) {
       case 'Text':
       case 'TextArea':
@@ -212,6 +354,7 @@ const DynamicQuestionnaire: React.FC = () => {
                 )}
               </>
             )}
+            {renderConditionalUI(index)}
           </>
         );
       case 'MultiSelect':
