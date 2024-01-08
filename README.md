@@ -1,1 +1,1 @@
-[![wakatime](https://wakatime.com/badge/user/018cea35-93f1-46ec-8967-f09342ad8d58/project/018cea37-05f7-430d-9cbb-148e1afd28ad.svg)](https://wakatime.com/badge/user/018cea35-93f1-46ec-8967-f09342ad8d58/project/018cea37-05f7-430d-9cbb-148e1afd28ad)
+[![wakatime](https://wakatime.com/badge/github/smileyhogue/PSQ-JSON-generator.svg)](https://wakatime.com/badge/github/smileyhogue/PSQ-JSON-generator)
