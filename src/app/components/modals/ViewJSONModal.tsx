@@ -52,7 +52,7 @@ const JsonViewModal: React.FC<JsonViewModalProps> = ({
         <div className={styles.modalContent}>
           <textarea
             className={styles.jsonOutput}
-            value={jsonData}
+            value={jsonData.replaceAll("'", "\\'")}
             readOnly
           ></textarea>
         </div>
