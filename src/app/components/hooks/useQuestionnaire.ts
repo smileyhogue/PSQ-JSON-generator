@@ -81,7 +81,9 @@ export function useQuestionnaire() {
   const addAnswer = (questionIndex: number) => {
     const updatedQuestions = [...questions];
     updatedQuestions[questionIndex].Answers.push({
-      ExtAnswerID: '',
+      ExtAnswerID: (
+        updatedQuestions[questionIndex].Answers.length + 1
+      ).toString(),
       AnswerText: '',
     });
     setQuestions(updatedQuestions);
