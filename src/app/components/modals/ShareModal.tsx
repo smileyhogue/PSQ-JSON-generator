@@ -16,36 +16,23 @@ const ShareModal: React.FC<RequestInfoModalProps> = ({
   initialData,
 }) => {
   const [accountName, setAccountName] = useState(initialData.accountName);
-  const [requestType, setRequestType] = useState(initialData.requestType);
-  const [sameAffiliate, setSameAffiliate] = useState(initialData.sameAffiliate);
-  const [campaignType, setCampaignType] = useState(initialData.campaignType);
-  const [campaigns, setCampaigns] = useState(initialData.campaigns || ['']);
+  const [jobIdentification, setJobIdentification] = useState(
+    initialData.jobIdentification || ''
+  );
+  const [jobDetail, setJobDetail] = useState(initialData.jobDetail || '');
 
   useEffect(() => {
     setAccountName(initialData.accountName);
-    setRequestType(initialData.requestType);
-    setSameAffiliate(initialData.sameAffiliate);
-    setCampaignType(initialData.campaignType);
-    setCampaigns(initialData.campaigns || ['']);
+    setJobIdentification(initialData.jobIdentification || '');
+    setJobDetail(initialData.jobDetail || '');
   }, [initialData]);
-
-  const handleAddCampaign = () => {
-    setCampaigns([...campaigns, '']);
-  };
-
-  const handleCampaignChange = (index: number, value: string) => {
-    const updatedCampaigns = [...campaigns];
-    updatedCampaigns[index] = value;
-    setCampaigns(updatedCampaigns);
-  };
 
   const handleSubmit = () => {
     const data = {
       accountName,
-      requestType,
-      sameAffiliate,
-      campaignType,
-      campaigns,
+      jobIdentification,
+      jobDetail,
+      // ... other data
     };
     onCopyURL(data);
   };
@@ -53,6 +40,48 @@ const ShareModal: React.FC<RequestInfoModalProps> = ({
   if (!show) {
     return null;
   }
+
+  const renderJobDetailInput = () => {
+    switch (jobIdentification) {
+      case 'Hashtag':
+      case 'Job category':
+      case 'Something Else':
+        return (
+          <>
+            <label htmlFor="text" className={styles.label}>
+              {jobIdentification}
+            </label>
+            <input
+              id="text"
+              type="text"
+              value={jobDetail}
+              onChange={(e) => setJobDetail(e.target.value)}
+              className={styles.input}
+            />
+          </>
+        );
+      case 'List of Job IDs':
+      case 'Job titles':
+        return (
+          <>
+            <label htmlFor="textarea" className={styles.label}>
+              {jobIdentification}
+            </label>
+
+            <textarea
+              id="textarea"
+              value={jobDetail}
+              onChange={(e) => setJobDetail(e.target.value)}
+              className={styles.input}
+            />
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
+  if (!show) return null;
 
   return (
     <div className={styles.modalBackdrop}>
@@ -64,86 +93,41 @@ const ShareModal: React.FC<RequestInfoModalProps> = ({
           </button>
         </div>
         <div className={styles.modalContent}>
-          <div className={styles.leftColumn}>
-            <label htmlFor="accountName" className={styles.label}>
-              Account Name
-            </label>
-            <input
-              id="accountName"
-              type="text"
-              value={accountName}
-              onChange={(e) => setAccountName(e.target.value)}
-              className={styles.input}
-            />
+          <label htmlFor="accountName" className={styles.label}>
+            Account Name
+          </label>
+          <input
+            id="accountName"
+            type="text"
+            value={accountName}
+            onChange={(e) => setAccountName(e.target.value)}
+            className={styles.input}
+          />
+          {/* Modal Header and Account Name Input here */}
+          <label htmlFor="jobIdentification" className={styles.label}>
+            Job Identification
+          </label>
+          <select
+            id="jobIdentification"
+            value={jobIdentification}
+            onChange={(e) => setJobIdentification(e.target.value)}
+            className={styles.select}
+          >
+            <option value="">Select Job Identification</option>
+            <option value="Hashtag">Hashtag</option>
+            <option value="List of Job IDs">List of Job IDs</option>
+            <option value="Job titles">Job Titles</option>
+            <option value="Job category">Job Category</option>
+            <option value="Something Else">Something Else</option>
+            <option value="All Jobs">All Jobs</option>
+          </select>
 
-            <label htmlFor="requestType" className={styles.label}>
-              Request Type
-            </label>
-            <select
-              id="requestType"
-              value={requestType}
-              onChange={(e) => setRequestType(e.target.value)}
-              className={styles.select}
-            >
-              <option value="">Select Request Type</option>
-              <option value="New Launch">New Launch</option>
-              <option value="Existing Campaign">Existing Campaign</option>
-            </select>
+          {renderJobDetailInput()}
 
-            <label htmlFor="sameAffiliate" className={styles.label}>
-              Same Affiliate?
-            </label>
-            <select
-              id="sameAffiliate"
-              value={sameAffiliate}
-              onChange={(e) => setSameAffiliate(e.target.value)}
-              className={styles.select}
-            >
-              <option value="">Select Affiliate Status</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-
-            <label htmlFor="campaignType" className={styles.label}>
-              Campaign Type
-            </label>
-            <select
-              id="campaignType"
-              value={campaignType}
-              onChange={(e) => setCampaignType(e.target.value)}
-              className={styles.select}
-            >
-              <option value="">Select Campaign Type</option>
-              <option value="PandoLogic + Easy Apply">
-                PandoLogic + Easy Apply
-              </option>
-              <option value="A supported ATS">A supported ATS</option>
-            </select>
-          </div>
-
-          <div className={styles.rightColumn}>
-            <label className={styles.label}>Campaigns</label>
-            <div className={styles.campaignContainer}>
-              {campaigns.map((campaign, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  placeholder={`Campaign ${index + 1}`}
-                  value={campaign}
-                  onChange={(e) => handleCampaignChange(index, e.target.value)}
-                  className={styles.input}
-                />
-              ))}
-              <button onClick={handleAddCampaign} className={styles.addButton}>
-                Add Campaign
-              </button>
-            </div>
-          </div>
+          <button onClick={handleSubmit} className={styles.submitButton}>
+            Generate Request
+          </button>
         </div>
-
-        <button onClick={handleSubmit} className={styles.submitButton}>
-          Copy Shareable URL
-        </button>
       </div>
     </div>
   );

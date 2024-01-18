@@ -62,11 +62,9 @@ export interface CombinedState {
 
 export interface ModalData {
   accountName: string;
-  requestType: string;
-  sameAffiliate: string;
-  campaignType: string;
-  atsType?: string;
-  campaigns: string[];
+  jobIdentification: string;
+  jobDetail?: string; // Field for additional details based on job identification
+  // ... other fields
 }
 
 export interface SimplifiedModalData {

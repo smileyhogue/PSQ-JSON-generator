@@ -612,7 +612,7 @@ const DynamicQuestionnaire: React.FC = () => {
           View JSON
         </Button>
         <Button onClick={handleShareUrlModal} className={styles.modalButton}>
-          Copy Shareable URL
+          Generate Request
         </Button>
         {isDataFromURL && (
           <Button
