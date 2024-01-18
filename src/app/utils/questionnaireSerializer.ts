@@ -9,14 +9,12 @@ import {
   ModalData,
   Condition,
 } from '@/types/QuestionnaireTypes';
+import JSZip from 'jszip';
 
 interface SimplifiedModalData {
-  an: string; // Account Name
-  rt: string; // Request Type
-  sa: string; // Same Affiliate
-  ct: string; // Campaign Type
-  at?: string; // ATS Type
-  cs: string[]; // Campaigns
+  an: string;
+  ji: string;
+  jd?: string;
 }
 
 interface CombinedState {
@@ -45,13 +43,20 @@ const reverseCampaignTypeMapping: { [key: string]: string } = {
 };
 
 const simplifyModalData = (modalData: ModalData): SimplifiedModalData => {
+  // Assuming you have mappings for the new fields like Job Identification
+  const jobIdentificationMapping = {
+    Hashtag: 'ht',
+    'List of Job IDs': 'ljid',
+    'Job Titles': 'jt',
+    'Job Category': 'jc',
+    'Something Else': 'se',
+    'All Jobs': 'aj',
+  };
+
   return {
     an: modalData.accountName,
-    rt: requestTypeMapping[modalData.requestType],
-    sa: modalData.sameAffiliate,
-    ct: campaignTypeMapping[modalData.campaignType],
-    at: modalData.atsType,
-    cs: modalData.campaigns,
+    ji: modalData.jobIdentification, // New field for Job Identification
+    jd: modalData.jobDetail, // Assuming jobDetail is a string that can be directly used
   };
 };
 
@@ -60,11 +65,8 @@ const expandModalData = (
 ): ModalData => {
   return {
     accountName: simplifiedModalData.an,
-    requestType: reverseRequestTypeMapping[simplifiedModalData.rt],
-    sameAffiliate: simplifiedModalData.sa,
-    campaignType: reverseCampaignTypeMapping[simplifiedModalData.ct],
-    atsType: simplifiedModalData.at,
-    campaigns: simplifiedModalData.cs,
+    jobIdentification: simplifiedModalData.ji,
+    jobDetail: simplifiedModalData.jd,
   };
 };
 
@@ -148,7 +150,8 @@ export const parseQueryString = (): CombinedState | null => {
 export const generateShareableUrl = (combinedState: CombinedState): string => {
   if (typeof window !== 'undefined') {
     const queryString = serializeStateToQueryString(combinedState);
-    return `${window.location.origin}${window.location.pathname}?data=${queryString}`;
+    const url = `${window.location.origin}?data=${queryString}`;
+    createZipFile(combinedState.modalData, combinedState.questions, url);
   }
   return '';
 };
@@ -157,9 +160,46 @@ export const copyToClipboard = async (url: string) => {
   if (typeof window !== 'undefined') {
     try {
       await navigator.clipboard.writeText(url);
-      alert('URL copied to clipboard');
+      alert('Data Downloaded, please attach to your case.');
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
   }
+};
+
+const generateModalDataCSV = (modalData: ModalData, shareableUrl: string) => {
+  // Create a CSV content for modal data
+  // Include the shareable URL as a new column in the CSV
+  const csvContent = `Account Name,Job ID Method,Details,Shareable URL\n${modalData.accountName},${modalData.jobIdentification},${modalData.jobDetail},${shareableUrl}`;
+
+  return csvContent;
+};
+
+// Function to create a zip file with CSV and JSON files
+const createZipFile = (
+  modalData: ModalData,
+  questions: Question[],
+  shareableUrl: string
+) => {
+  const zip = new JSZip();
+
+  // Generate CSV file for modal data
+  const modalDataCSV = generateModalDataCSV(modalData, shareableUrl);
+  zip.file('request.csv', modalDataCSV);
+
+  // Generate JSON file for questions
+  var questionsJSON = JSON.stringify(questions, null, 2);
+  questionsJSON = questionsJSON.replaceAll("'", "\\'");
+  zip.file('questions.json', questionsJSON);
+
+  // Create the zip file
+  zip.generateAsync({ type: 'blob' }).then((content) => {
+    const url = window.URL.createObjectURL(content);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${modalData.accountName}_data.zip`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+  });
 };

@@ -31,22 +31,11 @@ const ViewModalInfo: React.FC<ViewModalInfoProps> = ({
             <strong>Account Name:</strong> {modalData.accountName}
           </div>
           <div className={styles.infoRow}>
-            <strong>Request Type:</strong> {modalData.requestType}
+            <strong>Job Detail:</strong> {modalData.jobDetail}
           </div>
           <div className={styles.infoRow}>
-            <strong>Same Affiliate:</strong>{' '}
-            {modalData.sameAffiliate ? 'Yes' : 'No'}
-          </div>
-          <div className={styles.infoRow}>
-            <strong>Apply Method:</strong> {modalData.campaignType}
-          </div>
-          <div className={styles.infoRow}>
-            <strong>Campaigns:</strong>
-            <ul className={styles.infoList}>
-              {modalData.campaigns.map((campaign, index) => (
-                <li key={index}>{campaign}</li>
-              ))}
-            </ul>
+            <strong>Identificaiton Method:</strong>{' '}
+            {modalData.jobIdentification}
           </div>
         </div>
       </div>
