@@ -89,6 +89,7 @@ const DynamicQuestionnaire: React.FC = () => {
   ]);
 
   useEffect(() => {
+    addQuestion();
     const initialState = parseQueryString();
     if (initialState) {
       setQuestions(initialState.questions);
