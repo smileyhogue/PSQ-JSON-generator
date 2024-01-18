@@ -12,11 +12,8 @@ export function useQuestionnaire() {
   const [showViewModal, setShowViewModal] = useState(isDataFromURL);
   const [modalData, setModalData] = useState<ModalData>({
     accountName: '',
-    requestType: '',
-    sameAffiliate: '',
-    campaignType: '',
-    atsType: '',
-    campaigns: [],
+    jobIdentification: '',
+    jobDetail: '',
   });
   const [showJsonModal, setShowJsonModal] = useState(false);
 
