@@ -573,21 +573,30 @@ const DynamicQuestionnaire: React.FC = () => {
                         handleQuestionChange(index, 'QuestionType', newValue)
                       }
                     >
-                      <SelectTrigger className={styles.questionSelect}>
+                      <SelectTrigger
+                        id="questionType"
+                        className={styles.questionSelect}
+                      >
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Types</SelectLabel>
-                          <SelectItem value="Text">Text</SelectItem>
-                          <SelectItem value="TextArea">TextArea</SelectItem>
-                          <SelectItem value="MultiSelect">
+                          <SelectItem id="qtText" value="Text">
+                            Text
+                          </SelectItem>
+                          <SelectItem id="qtTArea" value="TextArea">
+                            TextArea
+                          </SelectItem>
+                          <SelectItem id="qtMSelect" value="MultiSelect">
                             MultiSelect
                           </SelectItem>
-                          <SelectItem value="SingleSelect">
+                          <SelectItem id="qtSSelect" value="SingleSelect">
                             SingleSelect
                           </SelectItem>
-                          <SelectItem value="Date">Date</SelectItem>
+                          <SelectItem id="qtDate" value="Date">
+                            Date
+                          </SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
