@@ -1,4 +1,4 @@
-describe('template spec', () => {
+describe('check all elements are visible when they should be', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/');
     /* ==== Generated with Cypress Studio ==== */
