@@ -519,13 +519,15 @@ const DynamicQuestionnaire: React.FC = () => {
                 <span className={styles.questionText}>
                   {question.QuestionText || `Question ${index + 1}`}
                 </span>
-                <Button
-                  onClick={() => deleteQuestion(index)}
-                  variant="destructive"
-                  className={styles.deleteButton}
-                >
-                  Delete
-                </Button>
+                {questions.length > 1 && (
+                  <Button
+                    onClick={() => deleteQuestion(index)}
+                    variant="destructive"
+                    className={styles.deleteButton}
+                  >
+                    Delete
+                  </Button>
+                )}
               </AccordionTrigger>
               <AccordionContent>
                 <div className={styles.questionContainer}>
