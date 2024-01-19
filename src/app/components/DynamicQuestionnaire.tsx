@@ -40,6 +40,8 @@ import {
 // styles
 import styles from '../styles/DynamicQuestionnaire.module.css';
 import TooltipComponent from './ToolTip';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DynamicQuestionnaire: React.FC = () => {
   const {
@@ -651,6 +653,7 @@ const DynamicQuestionnaire: React.FC = () => {
         onClose={toggleShowJsonModal}
         jsonData={jsonOutput}
       />
+      <ToastContainer />
     </div>
   );
 };
