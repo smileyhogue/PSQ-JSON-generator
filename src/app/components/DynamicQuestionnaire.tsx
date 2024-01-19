@@ -513,7 +513,6 @@ const DynamicQuestionnaire: React.FC = () => {
   };
   return (
     <div>
-      <ToastContainer />
       <div className={styles.questionsContainer}>
         <Accordion type="single" value={value} onValueChange={setValue}>
           {questions.map((question, index) => (
@@ -654,6 +653,7 @@ const DynamicQuestionnaire: React.FC = () => {
         onClose={toggleShowJsonModal}
         jsonData={jsonOutput}
       />
+      <ToastContainer />
     </div>
   );
 };
