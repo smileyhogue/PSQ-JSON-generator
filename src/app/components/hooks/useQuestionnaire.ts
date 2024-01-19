@@ -1,6 +1,6 @@
 import { useState } from 'react';
-
-import { Question, Answer, ModalData } from '@/types/QuestionnaireTypes'; // Update the path accordingly
+import { toast, ToastContainer } from 'react-toastify';
+import { Question, Answer, ModalData } from '@/types/QuestionnaireTypes';
 
 export function useQuestionnaire() {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -144,7 +144,9 @@ export function useQuestionnaire() {
     if (errors.length === 0) {
       toggleShowJsonModal(); // This function toggles the state to show/hide the JSON modal
     } else {
-      alert('Please fill in all required fields:\n' + errors.join('\n'));
+      toast.error('Please fill in all required fields:\n' + errors.join('\n'), {
+        position: 'top-center',
+      });
     }
   };
 
@@ -153,7 +155,9 @@ export function useQuestionnaire() {
     if (errors.length === 0) {
       setShowModal(true); // This sets the state to show the Share URL modal
     } else {
-      alert('Please fill in all required fields:\n' + errors.join('\n'));
+      toast.error('Please fill in all required fields:\n' + errors.join('\n'), {
+        position: 'top-center',
+      });
     }
   };
 

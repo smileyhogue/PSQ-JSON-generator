@@ -1,3 +1,4 @@
+import { toast, ToastContainer } from 'react-toastify';
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
@@ -160,7 +161,10 @@ export const copyToClipboard = async (url: string) => {
   if (typeof window !== 'undefined') {
     try {
       await navigator.clipboard.writeText(url);
-      alert('Data Downloaded, please attach to your case.');
+      toast.success('Data Downloaded, please attach to your case.'),
+        {
+          position: 'top-center',
+        };
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
