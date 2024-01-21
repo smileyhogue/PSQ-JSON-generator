@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Question, Answer, ModalData } from '@/types/QuestionnaireTypes';
 
 export function useQuestionnaire() {
@@ -142,7 +142,7 @@ export function useQuestionnaire() {
   const handleViewJsonModal = () => {
     const errors = validateQuestions();
     if (errors.length === 0) {
-      toggleShowJsonModal(); // This function toggles the state to show/hide the JSON modal
+      toggleShowJsonModal();
     } else {
       toast.error('Please fill in all required fields:\n' + errors.join('\n'), {
         position: 'top-center',
@@ -153,7 +153,7 @@ export function useQuestionnaire() {
   const handleShareUrlModal = () => {
     const errors = validateQuestions();
     if (errors.length === 0) {
-      setShowModal(true); // This sets the state to show the Share URL modal
+      setShowModal(true);
     } else {
       toast.error('Please fill in all required fields:\n' + errors.join('\n'), {
         position: 'top-center',

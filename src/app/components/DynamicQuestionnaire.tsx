@@ -22,6 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import TooltipComponent from './ToolTip';
+// Toast notifications
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // hooks
 import { useQuestionnaire } from '@/components/hooks/useQuestionnaire';
 // utils
@@ -39,9 +43,6 @@ import {
 } from '@/types/QuestionnaireTypes';
 // styles
 import styles from '../styles/DynamicQuestionnaire.module.css';
-import TooltipComponent from './ToolTip';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const DynamicQuestionnaire: React.FC = () => {
   const {
@@ -74,6 +75,7 @@ const DynamicQuestionnaire: React.FC = () => {
   } = useQuestionnaire();
   const formatOptions = ['integer', 'text'];
 
+  // Parse URL for initial data if it exists
   useEffect(() => {
     const urlData = parseQueryString();
     if (urlData) {
@@ -141,21 +143,17 @@ const DynamicQuestionnaire: React.FC = () => {
     const isUnlimited = currentQuestion.Limit === 0;
 
     const handleLimitChange = (e: any) => {
-      // If the checkbox is checked, set the limit to 0, otherwise use the number input's value
       const limitValue = e.target.checked ? 0 : parseInt(e.target.value);
       handleQuestionChange(index, 'Limit', limitValue);
     };
-    // Start new conditional feature
     const handleConditionalChange = (index: number, checked: boolean) => {
       const updatedQuestions = [...questions];
       if (checked) {
-        // Initialize the Condition object if checked
         updatedQuestions[index].Condition = {
           ExtQuestionID: '',
           AnswerValue: '',
         };
       } else {
-        // Remove the Condition object if unchecked
         delete updatedQuestions[index].Condition;
       }
       setQuestions(updatedQuestions);
@@ -190,7 +188,6 @@ const DynamicQuestionnaire: React.FC = () => {
     };
 
     const renderConditionalUI = (index: number): JSX.Element | null => {
-      // Filter questions to only include those before the current index
       const previousQuestions = questions
         .slice(0, index)
         .filter(
@@ -199,12 +196,10 @@ const DynamicQuestionnaire: React.FC = () => {
             q.QuestionType === 'SingleSelect'
         );
 
-      // Check if there are any eligible previous questions for conditional logic
       if (previousQuestions.length === 0) {
         return null;
       }
 
-      // Extract current question's Condition for easier access
       const currentCondition: Condition = questions[index].Condition || {};
 
       return (
@@ -282,7 +277,6 @@ const DynamicQuestionnaire: React.FC = () => {
       );
     };
 
-    // end new conditional feature
     switch (type) {
       case 'Text':
       case 'TextArea':
@@ -292,6 +286,7 @@ const DynamicQuestionnaire: React.FC = () => {
             <div className={styles.checkboxContainer}>
               <div className={styles.tooltipInputContainer}>
                 <input
+                  data-cy="requiredCheckBox"
                   type="checkbox"
                   id={`required-${type}-${index}`}
                   className={styles.checkbox}
@@ -306,7 +301,10 @@ const DynamicQuestionnaire: React.FC = () => {
                 >
                   Required
                 </label>
-                <TooltipComponent content="Is the user required to answer this question?" />
+                <TooltipComponent
+                  data-cy="requiredCheckBox"
+                  content="Is the user required to answer this question?"
+                />
               </div>
             </div>
 
@@ -322,7 +320,10 @@ const DynamicQuestionnaire: React.FC = () => {
                     }
                     className={styles.questionInput}
                   />
-                  <TooltipComponent content="Minimum value allowed for the answer" />
+                  <TooltipComponent
+                    data-cy="minText"
+                    content="Minimum value allowed for the answer"
+                  />
                 </div>
                 <div className={styles.tooltipInputContainer}>
                   <Input
@@ -334,7 +335,10 @@ const DynamicQuestionnaire: React.FC = () => {
                     }
                     className={styles.questionInput}
                   />
-                  <TooltipComponent content="Maximum value allowed for the answer" />
+                  <TooltipComponent
+                    data-cy="maxText"
+                    content="Maximum value allowed for the answer"
+                  />
                 </div>
               </>
             )}
@@ -356,7 +360,10 @@ const DynamicQuestionnaire: React.FC = () => {
                       Unlimited characters
                     </label>
                   </div>
-                  <TooltipComponent content="Should the applicant be able to type an unlimited number of characters?" />
+                  <TooltipComponent
+                    data-cy="unlimitedCheck"
+                    content="Should the applicant be able to type an unlimited number of characters?"
+                  />
                 </div>
 
                 {!isUnlimited && (
@@ -393,7 +400,10 @@ const DynamicQuestionnaire: React.FC = () => {
               >
                 Required
               </label>
-              <TooltipComponent content="Is the user required to answer this question?" />
+              <TooltipComponent
+                data-cy="requiredCheck"
+                content="Is the user required to answer this question?"
+              />
             </div>
 
             <Accordion
@@ -406,6 +416,7 @@ const DynamicQuestionnaire: React.FC = () => {
                   <AccordionTrigger>
                     {answer.AnswerText || `Answer ${answerIndex + 1}`}
                     <Button
+                      data-cy="deleteAnswerButton"
                       variant="destructive"
                       onClick={() => deleteAnswer(index, answerIndex)}
                     >
@@ -429,6 +440,7 @@ const DynamicQuestionnaire: React.FC = () => {
                         className={styles.questionInput}
                       />
                       <Input
+                        data-cy="answerTextBox"
                         type="text"
                         placeholder="Answer Text"
                         value={answer.AnswerText}
@@ -448,6 +460,7 @@ const DynamicQuestionnaire: React.FC = () => {
               ))}
             </Accordion>
             <Button
+              data-cy="addAnswerButton"
               variant="outline"
               className={styles.questionButton}
               onClick={() => addAnswer(index)}
@@ -518,11 +531,12 @@ const DynamicQuestionnaire: React.FC = () => {
           {questions.map((question, index) => (
             <AccordionItem key={index} value={index.toString()}>
               <AccordionTrigger>
-                <span className={styles.questionText}>
+                <span data-cy="accordionHead" className={styles.questionText}>
                   {question.QuestionText || `Question ${index + 1}`}
                 </span>
                 {questions.length > 1 && (
                   <Button
+                    data-cy="deleteQuestionButton"
                     onClick={() => deleteQuestion(index)}
                     variant="destructive"
                     className={styles.deleteButton}
@@ -547,6 +561,7 @@ const DynamicQuestionnaire: React.FC = () => {
                       className={styles.questionInput}
                     />
                     <TooltipComponent
+                      data-cy="questionId"
                       content="Question ID. This is used for the system to identify
                             unique questions and to identify condition
                             questions. This value must be unique."
@@ -554,6 +569,7 @@ const DynamicQuestionnaire: React.FC = () => {
                   </div>
                   <div className={styles.tooltipInputContainer}>
                     <Input
+                      data-cy="questionTextBox"
                       type="text"
                       value={question.QuestionText}
                       placeholder="Question Text"
@@ -566,7 +582,10 @@ const DynamicQuestionnaire: React.FC = () => {
                       }
                       className={styles.questionInput}
                     />
-                    <TooltipComponent content="This will be the question that is displayed to the user." />
+                    <TooltipComponent
+                      data-cy="questionText"
+                      content="This will be the question that is displayed to the user."
+                    />
                   </div>
                   <div className={styles.tooltipInputContainer}>
                     <Select
@@ -602,7 +621,10 @@ const DynamicQuestionnaire: React.FC = () => {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
-                    <TooltipComponent content="Type of answer allowed for the user" />
+                    <TooltipComponent
+                      data-cy="questionType"
+                      content="Type of answer allowed for the user"
+                    />
                   </div>
                   <div className={styles.additionalFields}>
                     {getAdditionalFields(question.QuestionType, index)}
@@ -613,6 +635,7 @@ const DynamicQuestionnaire: React.FC = () => {
           ))}
         </Accordion>
         <Button
+          data-cy="addQuestionButton"
           variant="outline"
           onClick={addQuestion}
           className={styles.questionButton}
@@ -622,10 +645,18 @@ const DynamicQuestionnaire: React.FC = () => {
       </div>
 
       <div className={styles.bottomButtonContainer}>
-        <Button onClick={handleViewJsonModal} className={styles.modalButton}>
+        <Button
+          data-cy="viewJsonButton"
+          onClick={handleViewJsonModal}
+          className={styles.modalButton}
+        >
           View JSON
         </Button>
-        <Button onClick={handleShareUrlModal} className={styles.modalButton}>
+        <Button
+          data-cy="genRequestButton"
+          onClick={handleShareUrlModal}
+          className={styles.modalButton}
+        >
           Generate Request
         </Button>
         {isDataFromURL && (

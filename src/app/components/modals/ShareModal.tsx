@@ -32,7 +32,6 @@ const ShareModal: React.FC<RequestInfoModalProps> = ({
       accountName,
       jobIdentification,
       jobDetail,
-      // ... other data
     };
     onCopyURL(data);
   };
@@ -103,7 +102,6 @@ const ShareModal: React.FC<RequestInfoModalProps> = ({
             onChange={(e) => setAccountName(e.target.value)}
             className={styles.input}
           />
-          {/* Modal Header and Account Name Input here */}
           <label htmlFor="jobIdentification" className={styles.label}>
             Job Identification
           </label>

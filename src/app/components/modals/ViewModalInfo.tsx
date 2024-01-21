@@ -31,11 +31,11 @@ const ViewModalInfo: React.FC<ViewModalInfoProps> = ({
             <strong>Account Name:</strong> {modalData.accountName}
           </div>
           <div className={styles.infoRow}>
-            <strong>Job Detail:</strong> {modalData.jobDetail}
-          </div>
-          <div className={styles.infoRow}>
             <strong>Identificaiton Method:</strong>{' '}
             {modalData.jobIdentification}
+          </div>
+          <div className={styles.infoRow}>
+            <strong>Job Detail:</strong> {modalData.jobDetail}
           </div>
         </div>
       </div>
