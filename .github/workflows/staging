@@ -1,11 +1,14 @@
 name: Vercel Preview Deployment
+
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
 on:
   push:
     branches:
       - stage
+
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
@@ -18,8 +21,7 @@ jobs:
           build: npm run build
           start: npm start
 
-  Deploy-Preview:
-    needs: cypress-run
+  needs: cypress-run
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
