@@ -78,6 +78,7 @@ const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
       QuestionText,
       QuestionType,
       Required,
+      Order,
       Min,
       Max,
       Limit,
@@ -89,11 +90,16 @@ const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
       t: QuestionText,
       qt: QuestionType,
       r: Required,
+      o: Order,
       mi: Min,
       ma: Max,
       l: Limit,
       f: Format,
-      d: Answers.map((a) => ({ aid: a.ExtAnswerID, at: a.AnswerText })),
+      d: Answers.map((a) => ({
+        aid: a.ExtAnswerID,
+        at: a.AnswerText,
+        o: a.Order,
+      })),
       c: Condition
         ? { qid: Condition.ExtQuestionID, av: Condition.AnswerValue }
         : undefined,
@@ -104,17 +110,22 @@ const simplifyState = (state: Question[]): SimplifiedQuestion[] => {
 export const expandState = (
   simplifiedState: SimplifiedQuestion[]
 ): Question[] => {
-  return simplifiedState.map(({ i, t, qt, r, mi, ma, l, f, d, c }) => ({
+  return simplifiedState.map(({ i, t, qt, r, o, mi, ma, l, f, d, c }) => ({
     ExtQuestionID: i || '',
     QuestionText: t || '',
     QuestionType: qt as QuestionType,
     Required: r === true,
+    Order: o || 0,
     Min: mi || '',
     Max: ma || '',
     Limit: l || 0,
     Format: f || '',
     Answers: d
-      ? d.map((a) => ({ ExtAnswerID: a.aid || '', AnswerText: a.at || '' }))
+      ? d.map((a) => ({
+          ExtAnswerID: a.aid || '',
+          AnswerText: a.at || '',
+          Order: a.o || 0,
+        }))
       : [],
     Condition: c ? { ExtQuestionID: c.qid, AnswerValue: c.av } : undefined,
   }));
