@@ -1,4 +1,4 @@
-name: Cypress Tests
+name: Deploy Production
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
