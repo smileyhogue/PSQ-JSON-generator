@@ -29,6 +29,7 @@ export function useQuestionnaire() {
         ExtQuestionID: newQuestionID,
         QuestionText: '',
         QuestionType: 'Text',
+        Order: questions.length + 1,
         Required: true,
         Min: '',
         Max: '',
@@ -82,6 +83,7 @@ export function useQuestionnaire() {
         updatedQuestions[questionIndex].Answers.length + 1
       ).toString(),
       AnswerText: '',
+      Order: updatedQuestions[questionIndex].Answers.length + 1,
     });
     setQuestions(updatedQuestions);
     setAnswerValue(
