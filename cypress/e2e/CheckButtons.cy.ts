@@ -21,7 +21,7 @@ describe('check all elements are visible when they should be', () => {
 
     cy.get('.JsonViewModal_jsonOutput__nAOwR').should(
       'have.value',
-      '[\n  {\n    "ExtQuestionID": "1",\n    "QuestionText": "test",\n    "QuestionType": "Text",\n    "Required": true,\n    "Min": "",\n    "Max": "",\n    "Limit": 0,\n    "Format": ""\n  },\n  {\n    "ExtQuestionID": "2",\n    "QuestionText": "test2",\n    "QuestionType": "Text",\n    "Required": true,\n    "Min": "",\n    "Max": "",\n    "Limit": 0,\n    "Format": ""\n  }\n]'
+      '[\n  {\n    "ExtQuestionID": "1",\n    "QuestionText": "test",\n    "QuestionType": "Text",\n    "Order": 1,\n    "Required": true,\n    "Min": "",\n    "Max": "",\n    "Limit": 0,\n    "Format": ""\n  },\n  {\n    "ExtQuestionID": "2",\n    "QuestionText": "test2",\n    "QuestionType": "Text",\n    "Order": 2,\n    "Required": true,\n    "Min": "",\n    "Max": "",\n    "Limit": 0,\n    "Format": ""\n  }\n]'
     );
 
     cy.get('.JsonViewModal_modal__JRlbi > .inline-flex').should('be.visible');

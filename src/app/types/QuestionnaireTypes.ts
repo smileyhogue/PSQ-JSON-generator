@@ -9,6 +9,7 @@ export type QuestionType =
 export interface Answer {
   ExtAnswerID: string;
   AnswerText: string;
+  Order: number;
 }
 
 export interface Condition {
@@ -21,6 +22,7 @@ export interface Question {
   QuestionText: string;
   QuestionType: QuestionType;
   Required: boolean;
+  Order: number;
   Min: string;
   Max: string;
   Limit: number;
@@ -38,6 +40,7 @@ export interface SimplifiedQuestion {
   t?: string;
   qt?: string;
   r?: boolean;
+  o?: number;
   mi?: string;
   ma?: string;
   l?: number;
@@ -53,6 +56,7 @@ export interface SimplifiedCondition {
 export interface SimplifiedAnswer {
   aid?: string;
   at?: string;
+  o?: number;
 }
 
 export interface CombinedState {
