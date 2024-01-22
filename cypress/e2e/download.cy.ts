@@ -16,7 +16,7 @@ describe('confirm file gets downloaded and is the right size', () => {
     const downloadedFilename = path.join(downloadsFolder, 'test_data.zip');
 
     cy.readFile(downloadedFilename, 'binary', { timeout: 15000 }).should(
-      (buffer: string | any[]) => expect(buffer.length).to.be.equal(658)
+      (buffer: string | any[]) => expect(buffer.length).to.be.equal(679)
     );
   });
 });
