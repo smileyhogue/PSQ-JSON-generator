@@ -23,7 +23,7 @@ describe('Confirm conditional questions work and are added correctly', () => {
 
     cy.get('.JsonViewModal_jsonOutput__nAOwR').should(
       'have.value',
-      '[\n  {\n    "ExtQuestionID": "1",\n    "QuestionText": "test",\n    "QuestionType": "SingleSelect",\n    "Required": false,\n    "Min": "",\n    "Max": "",\n    "Limit": 0,\n    "Format": "",\n    "Answers": [\n      {\n        "ExtAnswerID": "1",\n        "AnswerText": "Yes"\n      },\n      {\n        "ExtAnswerID": "2",\n        "AnswerText": "No"\n      }\n    ]\n  },\n  {\n    "ExtQuestionID": "2",\n    "QuestionText": "test1",\n    "QuestionType": "Text",\n    "Required": false,\n    "Min": "",\n    "Max": "",\n    "Limit": 0,\n    "Condition": {\n      "ExtQuestionID": "1",\n      "AnswerValue": "1"\n    },\n    "Format": ""\n  }\n]'
+      '[\n  {\n    "ExtQuestionID": "1",\n    "QuestionText": "test",\n    "QuestionType": "SingleSelect",\n    "Required": true,\n    "Min": "",\n    "Max": "",\n    "Limit": 0,\n    "Format": "",\n    "Answers": [\n      {\n        "ExtAnswerID": "1",\n        "AnswerText": "Yes"\n      },\n      {\n        "ExtAnswerID": "2",\n        "AnswerText": "No"\n      }\n    ]\n  },\n  {\n    "ExtQuestionID": "2",\n    "QuestionText": "test1",\n    "QuestionType": "Text",\n    "Required": true,\n    "Min": "",\n    "Max": "",\n    "Limit": 0,\n    "Condition": {\n      "ExtQuestionID": "1",\n      "AnswerValue": "1"\n    },\n    "Format": ""\n  }\n]'
     );
 
     /* ==== End Cypress Studio ==== */

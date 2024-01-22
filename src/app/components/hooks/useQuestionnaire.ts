@@ -29,7 +29,7 @@ export function useQuestionnaire() {
         ExtQuestionID: newQuestionID,
         QuestionText: '',
         QuestionType: 'Text',
-        Required: false,
+        Required: true,
         Min: '',
         Max: '',
         Limit: 0,
