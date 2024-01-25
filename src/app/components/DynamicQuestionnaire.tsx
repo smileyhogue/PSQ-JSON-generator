@@ -126,18 +126,27 @@ const DynamicQuestionnaire: React.FC = () => {
     const currentQuestion = questions[index];
 
     const formatDropdown = (
-      <select
-        className={styles.additionalInput}
-        value={currentQuestion.Format}
-        onChange={(e) => handleQuestionChange(index, 'Format', e.target.value)}
-      >
-        <option value="">Select Format</option>
-        {formatOptions.map((format, idx) => (
-          <option key={idx} value={format}>
-            {format}
-          </option>
-        ))}
-      </select>
+      <div className={styles.tooltipInputContainer}>
+        <label>Format</label>
+        <select
+          className={styles.additionalInput}
+          value={currentQuestion.Format}
+          onChange={(e) =>
+            handleQuestionChange(index, 'Format', e.target.value)
+          }
+        >
+          <option value="">Select Format</option>
+          {formatOptions.map((format, idx) => (
+            <option key={idx} value={format}>
+              {format}
+            </option>
+          ))}
+        </select>
+        <TooltipComponent
+          data-cy="questionId"
+          content="Format of the answer. This is used to validate the answer."
+        />
+      </div>
     );
 
     const isUnlimited = currentQuestion.Limit === 0;
@@ -468,6 +477,7 @@ const DynamicQuestionnaire: React.FC = () => {
             >
               Add Answer
             </Button>
+            {renderConditionalUI(index)}
           </>
         );
       case 'Date':
@@ -508,6 +518,7 @@ const DynamicQuestionnaire: React.FC = () => {
                 Required
               </label>
             </div>
+            {renderConditionalUI(index)}
           </>
         );
       default:
@@ -548,7 +559,40 @@ const DynamicQuestionnaire: React.FC = () => {
               <AccordionContent>
                 <div className={styles.questionContainer}>
                   <div className={styles.tooltipInputContainer}>
+                    <label>Order</label>
+                    <Select
+                      value={question.Order.toString()}
+                      onValueChange={(newValue) =>
+                        handleQuestionChange(index, 'Order', newValue)
+                      }
+                    >
+                      <SelectTrigger
+                        id="questionOrder"
+                        className={styles.questionSelect}
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Order</SelectLabel>
+                          {questions.map((q, idx) => (
+                            <SelectItem key={idx} value={(idx + 1).toString()}>
+                              {idx + 1}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <TooltipComponent
+                      data-cy="orderSelecttt"
+                      content="Change this to the order you want the question to appear in the questionnaire."
+                    />
+                  </div>
+                  <div className={styles.tooltipInputContainer}>
+                    <label>Question ID</label>
                     <Input
+                      // make uneditable
+                      readOnly
                       type="text"
                       value={question.ExtQuestionID}
                       onChange={(e) =>
@@ -568,6 +612,7 @@ const DynamicQuestionnaire: React.FC = () => {
                     />
                   </div>
                   <div className={styles.tooltipInputContainer}>
+                    <label>Question Text</label>
                     <Input
                       data-cy="questionTextBox"
                       type="text"
@@ -588,6 +633,7 @@ const DynamicQuestionnaire: React.FC = () => {
                     />
                   </div>
                   <div className={styles.tooltipInputContainer}>
+                    <label>Question Type</label>
                     <Select
                       value={question.QuestionType}
                       onValueChange={(newValue) =>

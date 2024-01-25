@@ -60,6 +60,19 @@ export function useQuestionnaire() {
       updatedQuestions[index].Format = '';
       updatedQuestions[index].Answers = [];
     }
+    if (field == 'Order') {
+      // update the index of the question being moved and update the order of the rest of the questions
+      const newIndex = parseInt(value);
+      updatedQuestions[index].Order = newIndex;
+      updatedQuestions[newIndex - 1].Order = index + 1;
+      for (let i = 0; i < updatedQuestions.length; i++) {
+        if (i !== index && i !== newIndex - 1) {
+          updatedQuestions[i].Order = i + 1;
+        }
+      }
+      updatedQuestions.sort((a, b) => a.Order - b.Order);
+    }
+
     setQuestions(updatedQuestions);
   };
 
@@ -96,6 +109,10 @@ export function useQuestionnaire() {
       (_, questionIndex) => questionIndex !== index
     );
     setQuestions(updatedQuestions);
+    for (let i = 0; i < updatedQuestions.length; i++) {
+      updatedQuestions[i].Order = i + 1;
+      updatedQuestions[i].ExtQuestionID = (i + 1).toString();
+    }
   };
 
   const deleteAnswer = (questionIndex: number, answerIndex: number) => {
@@ -108,6 +125,7 @@ export function useQuestionnaire() {
 
   const validateQuestions = () => {
     const errors: string[] = [];
+
     questions.forEach((question, index) => {
       if (!question.QuestionText.trim()) {
         errors.push(`Question ${index + 1} Text is required`);
@@ -136,6 +154,10 @@ export function useQuestionnaire() {
           });
         }
       }
+      if (!question.ExtQuestionID.trim()) {
+        errors.push(`Question ${index + 1} ID is required`);
+      }
+
       // Add other validation checks as needed
     });
     return errors;

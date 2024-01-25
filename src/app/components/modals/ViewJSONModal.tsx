@@ -18,7 +18,7 @@ const JsonViewModal: React.FC<JsonViewModalProps> = ({
 
   const handleCopyJson = async () => {
     try {
-      await navigator.clipboard.writeText(jsonData);
+      await navigator.clipboard.writeText(jsonData.replaceAll("'", "\\'"));
       setButtonColor('#96C13C');
       setButtonText('JSON Copied!');
       setTimeout(() => {

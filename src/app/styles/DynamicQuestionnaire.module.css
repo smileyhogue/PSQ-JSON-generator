@@ -1,4 +1,3 @@
-
 .questionContainer {
   margin-bottom: 20px;
   border: 1px solid #e6e6e6;
@@ -15,19 +14,35 @@
   width: 100%;
 }
 
-.questionInput, .questionSelect, .additionalInput, .additionalTextarea {
-  padding: 8px 12px;
+.tooltipInputContainer {
+  display: flex;
+  flex-wrap: wrap; /* Allow elements to wrap to the next line if needed */
+  align-items: center;
   margin-bottom: 10px;
+}
+
+.tooltipInputContainer label {
+  width: 150px; /* Adjust the width as needed */
+  padding-right: 10px; /* Add some spacing between label and input */
+}
+
+.tooltipInputContainer .questionInput,
+.tooltipInputContainer .questionSelect,
+.additionalInput,
+.additionalTextarea {
+  flex: 1; /* Allow inputs to expand and fill remaining space */
+  padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #fff;
   color: #333;
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  width: 50%;
+  margin-right: 10px; /* Add spacing between inputs */
 }
 
 /* Buttons */
-.questionButton {
+.questionButton,
+.modalButton {
   padding: 10px 15px;
   margin-top: 10px;
   border: none;
@@ -40,15 +55,7 @@
 }
 
 .modalButton {
-  padding: 10px 15px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 4px;
   background-color: #818486;
-  color: #fff;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .questionButton:hover {
@@ -68,19 +75,23 @@
   gap: 10px;
 }
 
-.questionButton, .modalButton {
+.questionButton,
+.modalButton {
   padding: 10px 15px;
   border-radius: 4px;
   font-size: 16px;
 }
-
+.tooltipInputContainer select {
+  flex: 1; /* Allow the select element to expand and fill remaining space */
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin-right: 10px; /* Add spacing between the select and other inputs */
+}
 .deleteButton {
   margin-left: auto;
   margin-right: 2rem;
 }
-
-.tooltipInputContainer {
-  display: flex;
-  align-items: center;
-}
-
