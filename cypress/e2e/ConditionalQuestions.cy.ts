@@ -6,10 +6,10 @@ describe('Confirm conditional questions work and are added correctly', () => {
     cy.get('#questionType').click();
     cy.get('#qtSSelect').click();
     cy.get('[data-cy="addAnswerButton"]').click();
-    cy.get('[data-cy="answerTextBox"]').type('Yes');
+    cy.get('[data-cy="answerTextBox0"]').type('Yes');
     cy.get('[data-cy="addAnswerButton"]').click();
     cy.wait(200);
-    cy.get('[data-cy="answerTextBox"]').type('No');
+    cy.get('[data-cy="answerTextBox1"]').type('No');
     cy.get('[data-cy="addQuestionButton"]').click();
     cy.wait(200);
     cy.get('[data-cy="questionTextBox"]').type('test1');
