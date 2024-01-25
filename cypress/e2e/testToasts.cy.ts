@@ -13,7 +13,7 @@ describe('test fail toast', () => {
   it('test download success toast', function () {
     /* ==== Generated with Cypress Studio ==== */
     cy.visit('http://localhost:3000');
-    cy.get(':nth-child(2) > .flex').type('test');
+    cy.get('[data-cy="questionTextBox"]').type('test');
     cy.wait(100);
     cy.get(
       '.DynamicQuestionnaire_bottomButtonContainer__q40ec > :nth-child(2)'

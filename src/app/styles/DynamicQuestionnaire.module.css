@@ -81,16 +81,7 @@
   border-radius: 4px;
   font-size: 16px;
 }
-.tooltipInputContainer select {
-  flex: 1; /* Allow the select element to expand and fill remaining space */
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #333;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  margin-right: 10px; /* Add spacing between the select and other inputs */
-}
+
 .deleteButton {
   margin-left: auto;
   margin-right: 2rem;

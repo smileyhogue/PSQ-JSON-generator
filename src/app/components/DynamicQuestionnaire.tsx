@@ -233,6 +233,7 @@ const DynamicQuestionnaire: React.FC = () => {
             <>
               <select
                 className={styles.select}
+                data-cy="previousQuestionSelect"
                 value={currentCondition.ExtQuestionID || ''}
                 onChange={(e) =>
                   handleConditionDetailsChange(
@@ -253,6 +254,7 @@ const DynamicQuestionnaire: React.FC = () => {
               {currentCondition.ExtQuestionID && (
                 <select
                   className={styles.select}
+                  data-cy="answerSelect"
                   value={currentCondition.AnswerValue || ''}
                   onChange={(e) =>
                     handleConditionDetailsChange(
@@ -449,7 +451,7 @@ const DynamicQuestionnaire: React.FC = () => {
                         className={styles.questionInput}
                       />
                       <Input
-                        data-cy="answerTextBox"
+                        data-cy={'answerTextBox' + answerIndex}
                         type="text"
                         placeholder="Answer Text"
                         value={answer.AnswerText}
@@ -542,7 +544,10 @@ const DynamicQuestionnaire: React.FC = () => {
           {questions.map((question, index) => (
             <AccordionItem key={index} value={index.toString()}>
               <AccordionTrigger>
-                <span data-cy="accordionHead" className={styles.questionText}>
+                <span
+                  data-cy={'accordionHead' + index.toString()}
+                  className={styles.questionText}
+                >
                   {question.QuestionText || `Question ${index + 1}`}
                 </span>
                 {questions.length > 1 && (

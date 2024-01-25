@@ -4,10 +4,8 @@ describe('confirm file gets downloaded and is the right size', () => {
   it('passes', () => {
     cy.visit('http://localhost:3000/');
     /* ==== Generated with Cypress Studio ==== */
-    cy.get(':nth-child(2) > .flex').type('test');
-    cy.get(
-      '.DynamicQuestionnaire_bottomButtonContainer__q40ec > :nth-child(2)'
-    ).click();
+    cy.get('[data-cy="questionTextBox"]').type('test');
+    cy.get('[data-cy="genRequestButton"]').click();
     cy.get('#accountName').type('test');
     cy.get('#jobIdentification').select('All Jobs');
     cy.get('.ShareModal_submitButton__XKHAJ').click();

@@ -15,8 +15,8 @@ describe('Confirm conditional questions work and are added correctly', () => {
     cy.get('[data-cy="questionTextBox"]').type('test1');
     /* ==== Generated with Cypress Studio ==== */
     cy.get('#conditional-1').check();
-    cy.get(':nth-child(3) > select').select('1');
-    cy.get(':nth-child(4) > :nth-child(3) > :nth-child(3)').select('1');
+    cy.get('[data-cy="previousQuestionSelect"]').select('1');
+    cy.get('[data-cy="answerSelect"]').select('1');
     /* ==== End Cypress Studio ==== */
     cy.get('[data-cy="viewJsonButton"]').click();
     /* ==== Generated with Cypress Studio ==== */
