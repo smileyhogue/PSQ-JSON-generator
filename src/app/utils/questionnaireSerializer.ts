@@ -11,6 +11,7 @@ import {
   Condition,
 } from '@/types/QuestionnaireTypes';
 import JSZip from 'jszip';
+import { useQuestionnaire } from '@/components/hooks/useQuestionnaire';
 
 interface SimplifiedModalData {
   an: string;
@@ -145,6 +146,8 @@ export const parseQueryString = (): CombinedState | null => {
   if (typeof window !== 'undefined') {
     const urlParams = new URLSearchParams(window.location.search);
     const data = urlParams.get('data');
+    const savedQuestions = localStorage.getItem('questions');
+    const savedModalData = localStorage.getItem('modalData');
     if (data) {
       const decompressed = decompressFromEncodedURIComponent(data);
       if (decompressed) {
@@ -152,6 +155,13 @@ export const parseQueryString = (): CombinedState | null => {
         return {
           questions: expandState(parsedData.questions),
           modalData: expandModalData(parsedData.modalData),
+        };
+      }
+    } else {
+      if (savedQuestions && savedModalData) {
+        return {
+          questions: JSON.parse(savedQuestions),
+          modalData: JSON.parse(savedModalData),
         };
       }
     }
