@@ -312,10 +312,6 @@ const DynamicQuestionnaire: React.FC = () => {
                 >
                   Required
                 </label>
-                <TooltipComponent
-                  data-cy="requiredCheckBox"
-                  content="Is the user required to answer this question?"
-                />
               </div>
             </div>
 
@@ -411,10 +407,6 @@ const DynamicQuestionnaire: React.FC = () => {
               >
                 Required
               </label>
-              <TooltipComponent
-                data-cy="requiredCheck"
-                content="Is the user required to answer this question?"
-              />
             </div>
 
             <Accordion
