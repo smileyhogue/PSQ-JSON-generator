@@ -9,6 +9,7 @@ export function useQuestionnaire() {
   const [answerValue, setAnswerValue] = useState('0');
   const [showModal, setShowModal] = useState(false);
   const [isDataFromURL, setIsDataFromURL] = useState(false);
+  const [isDataFromLocal, setIsDataFromLocal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(isDataFromURL);
   const [modalData, setModalData] = useState<ModalData>({
     accountName: '',
@@ -186,6 +187,22 @@ export function useQuestionnaire() {
     }
   };
 
+  const handleSave = () => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('questions', JSON.stringify(questions));
+      localStorage.setItem('modalData', JSON.stringify(modalData));
+    }
+  };
+
+  const handleClear = () => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('questions');
+      localStorage.removeItem('modalData');
+    }
+    // refresh the page
+    window.location.reload();
+  };
+
   return {
     questions,
     jsonOutput,
@@ -215,5 +232,9 @@ export function useQuestionnaire() {
     validateQuestions,
     handleViewJsonModal,
     handleShareUrlModal,
+    handleSave,
+    handleClear,
+    isDataFromLocal,
+    setIsDataFromLocal,
   };
 }

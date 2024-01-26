@@ -72,6 +72,8 @@ const DynamicQuestionnaire: React.FC = () => {
     toggleShowJsonModal,
     handleShareUrlModal,
     handleViewJsonModal,
+    handleSave,
+    handleClear,
   } = useQuestionnaire();
   const formatOptions = ['integer', 'text'];
 
@@ -702,13 +704,25 @@ const DynamicQuestionnaire: React.FC = () => {
         >
           Generate Request
         </Button>
+        <Button
+          data-cy="saveButton"
+          onClick={handleSave}
+          className={styles.modalButton}
+        >
+          Save
+        </Button>
         {isDataFromURL && (
-          <Button
-            onClick={() => setShowViewModal(true)}
-            className={styles.modalButton}
-          >
-            View Modal Info
-          </Button>
+          <>
+            <Button
+              onClick={() => setShowViewModal(true)}
+              className={styles.modalButton}
+            >
+              View Modal Info
+            </Button>
+            <Button onClick={handleClear} className={styles.modalButton}>
+              Clear Storage
+            </Button>
+          </>
         )}
       </div>
       <ViewModalInfo
