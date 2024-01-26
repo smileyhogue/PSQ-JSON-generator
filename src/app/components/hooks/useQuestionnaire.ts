@@ -158,8 +158,6 @@ export function useQuestionnaire() {
       if (!question.ExtQuestionID.trim()) {
         errors.push(`Question ${index + 1} ID is required`);
       }
-
-      // Add other validation checks as needed
     });
     return errors;
   };
@@ -169,9 +167,12 @@ export function useQuestionnaire() {
     if (errors.length === 0) {
       toggleShowJsonModal();
     } else {
-      toast.error('Please fill in all required fields:\n' + errors.join('\n'), {
-        position: 'top-center',
-      });
+      toast.error(
+        'Please fill in all required fields:\n' + errors.join(',\n'),
+        {
+          position: 'top-center',
+        }
+      );
     }
   };
 
@@ -180,9 +181,12 @@ export function useQuestionnaire() {
     if (errors.length === 0) {
       setShowModal(true);
     } else {
-      toast.error('Please fill in all required fields:\n' + errors.join('\n'), {
-        position: 'top-center',
-      });
+      toast.error(
+        'Please fill in all required fields:\n' + errors.join(',\n'),
+        {
+          position: 'top-center',
+        }
+      );
     }
   };
 
