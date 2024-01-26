@@ -71,6 +71,7 @@ export function useQuestionnaire() {
         }
       }
       updatedQuestions.sort((a, b) => a.Order - b.Order);
+      setValue((newIndex - 1).toString());
     }
 
     setQuestions(updatedQuestions);
