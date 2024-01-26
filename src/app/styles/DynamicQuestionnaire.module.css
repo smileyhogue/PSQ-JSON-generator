@@ -30,7 +30,7 @@
 .tooltipInputContainer .questionSelect,
 .additionalInput,
 .additionalTextarea {
-  flex: 1; /* Allow inputs to expand and fill remaining space */
+  flex: 0.5; /* Allow inputs to expand and fill remaining space */
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
