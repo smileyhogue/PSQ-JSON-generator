@@ -566,6 +566,7 @@ const DynamicQuestionnaire: React.FC = () => {
                       }
                     >
                       <SelectTrigger
+                        data-cy="orderSelect"
                         id="questionOrder"
                         className={styles.questionSelect}
                       >
@@ -575,7 +576,11 @@ const DynamicQuestionnaire: React.FC = () => {
                         <SelectGroup>
                           <SelectLabel>Order</SelectLabel>
                           {questions.map((q, idx) => (
-                            <SelectItem key={idx} value={(idx + 1).toString()}>
+                            <SelectItem
+                              key={idx}
+                              value={(idx + 1).toString()}
+                              data-cy={'orderSelect' + idx.toString()}
+                            >
                               {idx + 1}
                             </SelectItem>
                           ))}
