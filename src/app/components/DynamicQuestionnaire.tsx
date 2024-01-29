@@ -717,7 +717,7 @@ const DynamicQuestionnaire: React.FC = () => {
               onClick={() => setShowViewModal(true)}
               className={styles.modalButton}
             >
-              View Modal Info
+              View Request Info
             </Button>
             <Button onClick={handleClear} className={styles.modalButton}>
               Clear Storage

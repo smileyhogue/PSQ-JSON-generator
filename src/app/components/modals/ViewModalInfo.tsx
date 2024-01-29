@@ -21,7 +21,7 @@ const ViewModalInfo: React.FC<ViewModalInfoProps> = ({
     <div className={styles.modalBackdrop}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
-          <h3>Modal Information</h3>
+          <h3>Request Details</h3>
           <button onClick={onClose} className={styles.closeButton}>
             &times;
           </button>
