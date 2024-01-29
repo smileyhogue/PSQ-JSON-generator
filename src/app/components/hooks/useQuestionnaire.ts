@@ -48,31 +48,35 @@ export function useQuestionnaire() {
     value: any
   ) => {
     const updatedQuestions = [...questions];
-    updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
-    if (field == 'Format') {
-      updatedQuestions[index].Min = '';
-      updatedQuestions[index].Max = '';
-      updatedQuestions[index].Limit = 0;
-    }
-    if (field == 'QuestionType') {
+
+    if (field === 'Order') {
+      const newIndex = parseInt(value) - 1;
+      const oldIndex = updatedQuestions.findIndex((q) => q.Order === index + 1);
+
+      if (
+        newIndex >= 0 &&
+        newIndex < updatedQuestions.length &&
+        oldIndex >= 0
+      ) {
+        const questionToMove = updatedQuestions[oldIndex];
+        updatedQuestions.splice(oldIndex, 1); // Remove the question from its old position
+        updatedQuestions.splice(newIndex, 0, questionToMove); // Insert it at the new position
+      }
+
+      // Update the Order field for all questions
+      updatedQuestions.forEach((q, i) => {
+        q.Order = i + 1;
+      });
+      setValue(newIndex.toString());
+    } else if (field === 'Format' || field === 'QuestionType') {
+      (updatedQuestions[index] as any)[field] = value; // Use type assertion
       updatedQuestions[index].Min = '';
       updatedQuestions[index].Max = '';
       updatedQuestions[index].Limit = 0;
       updatedQuestions[index].Format = '';
       updatedQuestions[index].Answers = [];
-    }
-    if (field == 'Order') {
-      // update the index of the question being moved and update the order of the rest of the questions
-      const newIndex = parseInt(value);
-      updatedQuestions[index].Order = newIndex;
-      updatedQuestions[newIndex - 1].Order = index + 1;
-      for (let i = 0; i < updatedQuestions.length; i++) {
-        if (i !== index && i !== newIndex - 1) {
-          updatedQuestions[i].Order = i + 1;
-        }
-      }
-      updatedQuestions.sort((a, b) => a.Order - b.Order);
-      setValue((newIndex - 1).toString());
+    } else {
+      (updatedQuestions[index] as any)[field] = value; // Use type assertion
     }
 
     setQuestions(updatedQuestions);
