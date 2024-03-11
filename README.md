@@ -2,8 +2,8 @@
 
 |Project|PSQ JSON Editor|
 |--|--|
-| Owner | @smileyhogue |
-| Contributors | @brainsponge |
+| Owner | [@smileyhogue](https://github.com/smileyhogue) |
+| Contributors | [@brainsponge](https://github.com/brainsponge) |
 | Objective | Create a tool to eliminate the need for PSQ |
 | Status | Released |
 
